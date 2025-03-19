@@ -13,7 +13,7 @@ Ensure you have the following installed:
 1. Clone the repository:
    ```sh
    git clone https://github.com/Sushanto171/ai-scholar-server
-   cd your-repo
+   cd ai-scholar-server
    ```
 2. Install dependencies:
    ```sh
@@ -51,7 +51,6 @@ yarn start
 
 - Express.js
 - dotenv (for environment variables)
-- bcryptjs (for password hashing)
 - jsonwebtoken (for authentication)
 - cors (for handling CORS policies)
 

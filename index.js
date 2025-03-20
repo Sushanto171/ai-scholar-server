@@ -22,7 +22,7 @@ mongoose
   .catch((err) => console.log("MongoDB Connection Error:", err));
 
 app.get("/", (req, res) => {
-  res.send("Ai - Scholar now running......");
+  res.send("Ai-Scholar now running...");
 });
 
 app.listen(port, () => {

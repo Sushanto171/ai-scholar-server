@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Ai - Scholar now running......");
+  res.send("Ai-Scholar now running...");
 });
 
 app.listen(port, () => {

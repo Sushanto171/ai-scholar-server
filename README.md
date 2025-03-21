@@ -1,4 +1,4 @@
-# AI - Scholar || server
+# AI - Scholar Server
 
 ## Prerequisites
 

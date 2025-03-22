@@ -1,15 +1,5 @@
-.evn
 node_modules
+.env
 dist
 coverage
 ```
-
-
-
-
-
-
-
-
-
-

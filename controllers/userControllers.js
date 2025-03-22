@@ -14,7 +14,16 @@ const getUsers = async (req, res, next) => {
 const createUser = async (req, res, next) => {
   try {
     const userData = req.body;
-    const result = await User.insertOne(userData);
+
+    const isUser = await User.findOne({ email: userData.email });
+    console.log({ isUser });
+    let result;
+    if (!isUser) {
+      result = await User.create(userData);
+    } else {
+      result = isUser;
+    }
+
     sendResponse(res, 201, true, "Successfully users created", result);
   } catch (error) {
     next(error); // pass the error to the global handler

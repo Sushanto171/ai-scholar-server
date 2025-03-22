@@ -19,6 +19,7 @@ const createUser = async (req, res, next) => {
     
     let result;
     if (!isUser) {
+      console.log({userData})
       result = await User.create(userData);
     } else {
       result = isUser;

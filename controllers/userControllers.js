@@ -1,17 +1,17 @@
 const User = require("../models/userModels");
 const { sendResponse } = require("../utils");
 
-exports.getUsers = async (req, res, next) => {
+const getUsers = async (req, res, next) => {
   try {
     const result = await User.find();
-
     sendResponse(res, 200, true, result);
   } catch (error) {
     next(error);
   }
 };
 
-exports.createUser = async (req, res, next) => {
+
+const createUser = async (req, res, next) => {
   try {
     const userData = req.body;
 
@@ -19,7 +19,7 @@ exports.createUser = async (req, res, next) => {
     console.log({ isUser });
     let result;
     if (!isUser) {
-      result = await User.insertOne(userData);
+      result = await User.create(userData);
     } else {
       result = isUser;
     }
@@ -29,3 +29,10 @@ exports.createUser = async (req, res, next) => {
     next(error); // pass the error to the global handler
   }
 };
+
+module.exports = {
+  getUsers,
+  createUser
+}
+
+

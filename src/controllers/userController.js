@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const User = require("../models/userModels");
 const { sendResponse } = require("../utils");
 
 const getUsers = async (req, res, next) => {
@@ -16,16 +16,24 @@ const createUser = async (req, res, next) => {
 
     const isUser = await User.findOne({ email: userData.email });
     console.log({ isUser });
-    
+
     let result;
     if (!isUser) {
-      console.log({userData})
+      console.log({ userData });
       result = await User.create(userData);
     } else {
       result = isUser;
     }
 
-    sendResponse(res, 201, true, "Successfully users created", result);
+    sendResponse(
+      res,
+      isUser ? 200 : 201,
+      true,
+      isUser
+        ? "User already existing the database"
+        : "Successfully users created",
+      result
+    );
   } catch (error) {
     next(error); // pass the error to the global handler
   }
@@ -33,5 +41,5 @@ const createUser = async (req, res, next) => {
 
 module.exports = {
   getUsers,
-  createUser
-}
+  createUser,
+};

@@ -6,6 +6,7 @@ const cors = require("cors");
 const app = express();
 const morgan = require("morgan");
 const userRoutes = require("./routes/userRoutes");
+const coursesRoutes = require("./routes/coursesRoutes");
 const logger = require("./middlewares/logger");
 const { globalErrorHandler } = require("./middlewares/errorHandlers");
 
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(logger);
 app.use("/users", userRoutes);
+app.use("/courses", coursesRoutes);
 
 // Global error handlers (Must be after routes)
 app.use(globalErrorHandler);

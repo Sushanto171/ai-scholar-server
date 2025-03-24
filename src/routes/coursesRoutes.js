@@ -2,6 +2,8 @@ const {
   getCourses,
   createCourse,
   getCourseById,
+  updateCourseById,
+  deleteCourseById,
 } = require("../controllers/coursesController");
 
 const router = require("express").Router();
@@ -14,5 +16,11 @@ router.get("/:id", getCourseById);
 
 // create a new course
 router.post("/", createCourse);
+
+// update a course by id
+router.patch("/:id", updateCourseById);
+
+// delete a course by id
+router.delete("/:id", deleteCourseById);
 
 module.exports = router;

@@ -21,9 +21,11 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log("MongoDB Connection Error:", err));
 
+  
 app.get("/", (req, res) => {
   res.send("Ai-Scholar now running...");
 });
+
 
 app.listen(port, () => {
   console.log(`AI-Scholar Server running on port: ${port}`);

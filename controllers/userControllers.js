@@ -21,9 +21,10 @@ const createUser = async (req, res, next) => {
   }
 };
 
+
 module.exports = {
   getUsers,
   createUser
-}
+};
 
 

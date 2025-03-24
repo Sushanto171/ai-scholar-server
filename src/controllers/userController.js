@@ -42,12 +42,5 @@ const createUser = async (req, res, next) => {
 
 module.exports = {
   getUsers,
-<<<<<<< HEAD:controllers/userControllers.js
   createUser
 };
-
-
-=======
-  createUser,
-};
->>>>>>> 87b9fa3451153bdc85f43ed031b0181f9e97b846:src/controllers/userController.js

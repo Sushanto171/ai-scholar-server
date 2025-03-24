@@ -138,10 +138,23 @@ const deleteCourseById = async (req, res, next) => {
   }
 };
 
+// get all available categories
+const getCategoryList = async (req, res, next) => {
+  try {
+    const categories = await Course.find({}, "category");
+
+    // send response client side
+    sendResponse(res, 200, true, "Successfully get all categories", categories);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getCourses,
   createCourse,
   getCourseById,
   updateCourseById,
   deleteCourseById,
+  getCategoryList,
 };

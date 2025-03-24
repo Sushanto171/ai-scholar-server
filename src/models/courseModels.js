@@ -15,6 +15,7 @@ const courseSchema = new mongoose.Schema(
     instructor: { type: String, required: true },
     rating: { type: Number, required: true, min: 0, max: 5 },
     image: { type: String, required: true },
+    enrolled: { type: Number, default: 0 },
     lessons: [
       {
         title: { type: String },

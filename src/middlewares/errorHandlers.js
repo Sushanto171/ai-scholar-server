@@ -4,4 +4,5 @@ exports.globalErrorHandler = (err, req, res, next) => {
     success: false,
     message: err.message || "Internal server Error",
   });
+  next();
 };

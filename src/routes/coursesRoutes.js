@@ -4,12 +4,16 @@ const {
   getCourseById,
   updateCourseById,
   deleteCourseById,
+  getCategoryList,
 } = require("../controllers/coursesController");
 
 const router = require("express").Router();
 
 // get all courses
 router.get("/", getCourses);
+
+// get categories list
+router.get("/categories", getCategoryList);
 
 // get a course by id
 router.get("/:id", getCourseById);

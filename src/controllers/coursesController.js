@@ -141,8 +141,13 @@ const deleteCourseById = async (req, res, next) => {
 // get all available categories
 const getCategoryList = async (req, res, next) => {
   try {
-    const categories = await Course.find({}, "category");
-
+    const result = await Course.find({}, "category");
+    let categories = [];
+  result.forEach((course)=>{
+    if(!categories.some(item=> item.category === course.category)){
+      categories.push({category: course.category, _id: course._id})
+    }
+  })
     // send response client side
     sendResponse(res, 200, true, "Successfully get all categories", categories);
   } catch (error) {

@@ -1,4 +1,4 @@
-# AI Scholar - Server
+# AI Scholar - Server Side
 
 ## Prerequisites
 
@@ -6,7 +6,7 @@ Ensure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (LTS recommended)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-- A database (MongoDB, PostgreSQL, etc.) if required
+- A database (MongoDB) if required
 
 ## Installation
 

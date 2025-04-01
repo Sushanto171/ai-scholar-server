@@ -4,7 +4,7 @@ const { sendResponse } = require("../utils");
 const getUsers = async (req, res, next) => {
   try {
     const result = await User.find();
-    sendResponse(res, 200, true, "Successfully fetched all users data", result);
+    sendResponse(res, 200, true, result);
   } catch (error) {
     next(error);
   }
@@ -15,10 +15,11 @@ const createUser = async (req, res, next) => {
     const userData = req.body;
 
     const isUser = await User.findOne({ email: userData.email });
+    console.log({ isUser });
 
     let result;
     if (!isUser) {
-      // console.log({ userData });
+      console.log({ userData });
       result = await User.create(userData);
     } else {
       result = isUser;
@@ -35,13 +36,6 @@ const createUser = async (req, res, next) => {
     );
   } catch (error) {
     next(error); // pass the error to the global handler
-  }
-};
-
-const updateUser = async (req, res, next) => {
-  try {
-  } catch (error) {
-    next(error);
   }
 };
 

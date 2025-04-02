@@ -9,11 +9,13 @@ const {
 
 const router = require("express").Router();
 
-// get all courses
+// GET ALL COURSES
 router.get("/", getCourses);
 
-// get categories list
+// GET ALL CATEGORY LIST
 router.get("/categories", getCategoryList);
+
+
 
 // get a course by id
 router.get("/:id", getCourseById);

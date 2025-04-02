@@ -15,18 +15,16 @@ router.get("/", getCourses);
 // GET ALL CATEGORY LIST
 router.get("/categories", getCategoryList);
 
-
-
-// get a course by id
+// GET A COURSE BY ID
 router.get("/:id", getCourseById);
 
-// create a new course
+// CREATE A NEW COURSE
 router.post("/", createCourse);
 
-// update a course by id
+// UPDATE A COURSE BY ID
 router.patch("/:id", updateCourseById);
 
-// delete a course by id
+// DELETE A COURSE BY ID
 router.delete("/:id", deleteCourseById);
 
 module.exports = router;

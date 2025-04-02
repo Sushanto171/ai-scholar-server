@@ -10,9 +10,6 @@ const mediaRoutes = require("./routes/mediaRoutes");
 const logger = require("./middlewares/logger");
 const { globalErrorHandler } = require("./middlewares/errorHandlers");
 
-
-
-
 const app = express();
 const DB_URI = process.env.DB_URI;
 

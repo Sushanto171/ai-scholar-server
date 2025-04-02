@@ -7,9 +7,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
-
-
 // Function for upload media to cloudinary
 const uploadMediaToCloudinary = async (filePath) => {
   try {

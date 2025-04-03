@@ -1,7 +1,7 @@
 const Course = require("../models/courseModels");
 const { sendResponse, checkId } = require("../utils");
 
-// get all courses
+// Get all courses
 const getCourses = async (req, res, next) => {
   try {
     const { category, limit = 6, skip } = req.query;
@@ -22,7 +22,7 @@ const getCourses = async (req, res, next) => {
   }
 };
 
-// create course
+// Create a new course
 const createCourse = async (req, res, next) => {
   try {
     const {
@@ -120,7 +120,7 @@ const updateCourseById = async (req, res, next) => {
   }
 };
 
-// delete a course by ID
+// Delete a course by ID
 const deleteCourseById = async (req, res, next) => {
   try {
     const courseId = req?.params?.id;
@@ -138,7 +138,7 @@ const deleteCourseById = async (req, res, next) => {
   }
 };
 
-// get all available categories
+// Get all available categories
 const getCategoryList = async (req, res, next) => {
   try {
     const result = await Course.find({}, "category");

@@ -5,7 +5,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const userRoutes = require("./routes/userRoutes");
-const coursesRoutes = require("./routes/coursesRoutes");
+const courseRoutes = require("./routes/courseRoutes");
 const mediaRoutes = require("./routes/mediaRoutes");
 const logger = require("./middlewares/logger");
 const { globalErrorHandler } = require("./middlewares/errorHandlers");
@@ -21,7 +21,7 @@ app.use(logger);
 
 // Routes configuration
 app.use("/users", userRoutes);
-app.use("/courses", coursesRoutes);
+app.use("/courses", courseRoutes);
 app.use("/media", mediaRoutes);
 
 // Global error handlers (Must be after routes)

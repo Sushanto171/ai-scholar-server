@@ -71,18 +71,24 @@ This repository represents the **core engine** of the platform, designed with **
 
 ```bash
 ai-scholar-server/
-├── controllers/
-├── models/
-├── routes/
-├── middleware/
-├── utils/
-├── services/
-├── uploads/
-├── .env
-├── index.js
-├── package.json
-└── README.md
-```
+├── src/
+│   ├── controllers/       # Handles route logic for different entities
+│   ├── helpers/           # Utility functions and helper modules
+│   ├── middlewares/       # Custom middleware for auth, validation, error handling
+│   ├── models/            # Mongoose schema definitions
+│   ├── routes/            # API route definitions
+│   ├── services/          # Business logic and third-party integrations
+│   ├── utils/             # Reusable utility functions
+│   ├── uploads/           # Uploaded media storage (temporary or permanent)
+│   └── app.js             # Express app setup and middleware configuration
+│
+├── .env                   # Environment variables
+├── .gitignore             # Ignored files for Git
+├── index.js               # Entry point - connects app.js to server and DB
+├── package.json           # Project metadata and dependencies
+├── package-lock.json      # Exact versions of installed dependencies
+├── README.md              # Project documentation
+└── vercel.json            # Vercel deployment configuration
 ````
 
 ---
@@ -113,7 +119,7 @@ JWT_SECRET=your-super-secret
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/ai-scholar-server.git
+git clone https://github.com/Sushanto171/ai-scholar-server.git
 
 # Navigate to the project
 cd ai-scholar-server
@@ -136,21 +142,19 @@ npm install
 
 ## 🧪 Usage
 
+```
 ### Start in Development Mode
 
-```bash
 npm run dev
-```
 
 ### Start in Production Mode
 
-```bash
 npm start
 ```
 
 ---
 
-## 🔌 API Endpoints
+## 📌 API Endpoints
 
 ### 📚 Course Endpoints
 
@@ -243,12 +247,12 @@ Using **Stripe**, the server processes:
 
 Made with ❤️ by:
 
-- **Rafi**
-- **Jabed**
-- **Sushanto**
-- **Imran**
+- **Rafi Ahmed**
+- **Sheikh Jabed**
+- **Sushanto Sharkar**
+- **Imran Ahmed**
 - **Abdur Rahman**
-- **Shoyon**
+- **Shoyon Kumar**
 
 > Thanks to our entire team for building this intelligent and scalable learning experience.
 
@@ -263,7 +267,4 @@ This project is licensed under the **ISC License**.
 
 > ✨ _Empowering Education with Intelligence. Built for learners. Built for the future._
 
-```
-
 ---
-```

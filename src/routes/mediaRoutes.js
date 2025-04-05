@@ -17,10 +17,10 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       success: true,
       data: result,
     });
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
 
-    res.status(500).json({ success: false, message: "Error uploading file" });
+    res.status(500).json({ success: false, message: "Error in uploading file" });
   }
 });
 
@@ -41,10 +41,10 @@ router.delete("/delete/:id", async (req, res) => {
       success: true,
       message: "Asset deleted successfully from cloudinary",
     });
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
 
-    res.status(500).json({ success: false, message: "Error deleting file" });
+    res.status(500).json({ success: false, message: "Error in deleting file" });
   }
 });
 

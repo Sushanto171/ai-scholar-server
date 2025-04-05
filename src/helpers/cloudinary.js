@@ -17,6 +17,7 @@ const uploadMediaToCloudinary = async (filePath) => {
     return result;
   } catch (error) {
     console.log(error);
+
     throw new Error("Error uploading to cloudinary");
   }
 };
@@ -27,6 +28,7 @@ const deleteMediaFromCloudinary = async (publicId) => {
     await cloudinary.uploader.destroy(publicId);
   } catch (error) {
     console.log(error);
+    
     throw new Error("Failed to delete asset from cloudinary");
   }
 };

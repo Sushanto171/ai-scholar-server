@@ -16,12 +16,11 @@ const CourseSchema = new mongoose.Schema({
   instructor: {
     instructorName: { type: String, required: true },
     instructorEmail: { type: String, required: true },
-    instructorImage: { type: String, required: true },
+    instructorImage: String,
   },
   level: {
     type: String,
     required: true,
-    enum: ["Beginner", "Intermediate", "Advanced"],
   },
   primaryLanguage: { type: String, required: true },
   welcomeMessage: { type: String, required: true },

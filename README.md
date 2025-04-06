@@ -79,9 +79,8 @@ ai-scholar-server/
 │   ├── routes/            # API route definitions
 │   ├── services/          # Business logic and third-party integrations
 │   ├── utils/             # Reusable utility functions
-│   ├── uploads/           # Uploaded media storage (temporary or permanent)
 │   └── app.js             # Express app setup and middleware configuration
-│
+├── uploads/               # Uploaded media storage (temporary or permanent)
 ├── .env                   # Environment variables
 ├── .gitignore             # Ignored files for Git
 ├── index.js               # Entry point - connects app.js to server and DB
@@ -89,7 +88,7 @@ ai-scholar-server/
 ├── package-lock.json      # Exact versions of installed dependencies
 ├── README.md              # Project documentation
 └── vercel.json            # Vercel deployment configuration
-````
+```
 
 ---
 

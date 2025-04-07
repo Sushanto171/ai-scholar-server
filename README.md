@@ -225,7 +225,7 @@ Using **Stripe**, the server processes:
 ## 📡 Deployment
 
 - Deployed on **Vercel** for fast and scalable delivery.
-- Configured for **CI/CD** via GitHub Actions (or other tools).
+- Configured for **CI/CD** via GitHub Actions.
 - Supports **environment-based configurations**.
 
 ---

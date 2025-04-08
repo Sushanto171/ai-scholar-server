@@ -1,15 +1,7 @@
 const User = require("../models/userModels");
 const { sendResponse } = require("../utils");
 
-const getUsers = async (req, res, next) => {
-  try {
-    const result = await User.find();
-    sendResponse(res, 200, true, result);
-  } catch (error) {
-    next(error);
-  }
-};
-
+// SAVE USER DATA ON DATABASE (POST /users)
 const createUser = async (req, res, next) => {
   try {
     const userData = req.body;
@@ -18,6 +10,7 @@ const createUser = async (req, res, next) => {
     console.log({ isUser });
 
     let result;
+
     if (!isUser) {
       console.log({ userData });
       result = await User.create(userData);
@@ -39,6 +32,15 @@ const createUser = async (req, res, next) => {
   }
 };
 
+// GET ALL USER'S DATA FROM DATABASE (GET /users)
+const getUsers = async (req, res, next) => {
+  try {
+    const result = await User.find();
+    sendResponse(res, 200, true, result);
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getUsers,

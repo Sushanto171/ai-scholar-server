@@ -1,9 +1,12 @@
+const express = require("express");
 const { getUsers, createUser } = require("../controllers/userController");
 
-const router = require("express").Router();
+const router = express.Router();
 
-router.get("/", getUsers);
-
+// SAVE USER DATA ON DATABASE (POST /users)
 router.post("/", createUser);
+
+// GET ALL USER'S DATA FROM DATABASE (GET /users)
+router.get("/", getUsers);
 
 module.exports = router;

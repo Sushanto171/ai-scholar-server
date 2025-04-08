@@ -5,6 +5,7 @@ const {
   updateCourseById,
   deleteCourseById,
   getCategoryList,
+  getCourseDetailsByID,
 } = require("../controllers/coursesController");
 
 const router = require("express").Router();
@@ -16,7 +17,7 @@ router.get("/", getCourses);
 router.get("/categories", getCategoryList);
 
 // get a course by id
-router.get("/:id", getCourseById);
+router.get("/:id", getCourseDetailsByID);
 
 // create a new course
 router.post("/", createCourse);

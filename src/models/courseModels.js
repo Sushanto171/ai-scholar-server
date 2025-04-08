@@ -1,31 +1,42 @@
 const mongoose = require("mongoose");
 
-const courseSchema = new mongoose.Schema(
-  {
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    category: { type: String, required: true, trim: true },
-    level: {
-      type: String,
-      required: true,
-      enum: ["Beginner", "Intermediate", "Advanced"],
-    },
-    duration: { type: String, required: true },
-    price: { type: String, required: true },
-    instructor: { type: String, required: true },
-    rating: { type: Number, required: true, min: 0, max: 5 },
-    image: { type: String, required: true },
-    enrolled: { type: Number, default: 0 },
-    lessons: [
-      {
-        title: { type: String },
-        videoUrl: { type: String },
-        duration: { type: String },
-      },
-    ],
-  },
-  { timestamp: true }
-);
+const LectureSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  videoUrl: { type: String, required: true },
+  public_id: { type: String, required: true },
+  freePreview: Boolean,
+});
 
-const Course = mongoose.model("Course", courseSchema);
-module.exports = Course;
+const CourseSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  subtitle: { type: String, required: true },
+  image: { type: String, required: true },
+  category: { type: String, required: true, trim: true },
+  instructor: {
+    instructorName: { type: String, required: true },
+    instructorEmail: { type: String, required: true },
+    instructorImage: String,
+  },
+  level: {
+    type: String,
+    required: true,
+  },
+  primaryLanguage: { type: String, required: true },
+  welcomeMessage: { type: String, required: true },
+  pricing: { type: Number, required: true },
+  enrolled: { type: Number, default: 0 },
+  objectives: { type: String, required: true },
+  date: { type: Date, required: true },
+  students: [
+    {
+      studentName: String,
+      studentEmail: String,
+      paidAmount: String,
+    },
+  ],
+  curriculum: [LectureSchema],
+  isPublished: Boolean,
+});
+
+module.exports = mongoose.model("Course", CourseSchema);

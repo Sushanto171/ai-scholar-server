@@ -11,7 +11,7 @@ const logger = require("./middlewares/logger");
 const { globalErrorHandler } = require("./middlewares/errorHandlers");
 
 const app = express();
-const DB_URI = process.env.DB_URI;
+const DB_URI = process.env.DB_URL;
 
 // Middleware
 app.use(express.json());

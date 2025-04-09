@@ -1,5 +1,6 @@
-const Course = require("../models/courseModels");
-const { sendResponse, checkId } = require("../utils");
+const Course = require("../../models/courseModel");
+const { sendResponse } = require("../../utils/responseHandler");
+const { checkId } = require("../../validations/idValidation");
 
 // CREATE A NEW COURSE (POST /courses/add-course)
 const addNewCourse = async (req, res, next) => {

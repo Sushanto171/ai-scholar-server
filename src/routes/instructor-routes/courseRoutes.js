@@ -5,7 +5,7 @@ const {
   updateCourseByID,
   deleteCourseById,
   getCategoryList,
-} = require("../controllers/coursesController");
+} = require("../../controllers/instructor-controller/courseController");
 
 const router = require("express").Router();
 

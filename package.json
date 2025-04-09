@@ -7,10 +7,62 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "Rafi, Jabed, Sushanto, Imran, Abdur Rahman, Shoyon",
+  "keywords": [
+    "AI",
+    "course-management",
+    "e-learning",
+    "online-courses",
+    "learning-platform",
+    "express",
+    "react",
+    "nextjs",
+    "nodejs",
+    "mongodb",
+    "mongoose",
+    "cloudinary",
+    "rest-api",
+    "mvc-architecture",
+    "backend",
+    "api-development",
+    "ai-powered",
+    "course-tracking",
+    "digital-education"
+  ],
+  "author": "AI Scholar Team",
+  "contributors": [
+    {
+      "name": "Rafi Ahmed",
+      "email": "rafiiitju282@gmail.com",
+      "github": "https://github.com/rafirabby13"
+    },
+    {
+      "name": "Sheikh Jabed",
+      "email": "sheikhjabed69@gmail.com",
+      "github": "https://github.com/SK-Jabed"
+    },
+    {
+      "name": "Sushanto Sharkar",
+      "email": "sushantochandrasharkar171@gmail.com",
+      "github": "https://github.com/Sushanto171"
+    },
+    {
+      "name": "Imran Ahmed",
+      "email": "itahirbdp@gmail.com",
+      "github": "https://github.com/Imranahmed935"
+    },
+    {
+      "name": "Abdur Rahman",
+      "email": "abdurrahmanmahmud58@gmail.com",
+      "github": "https://github.com/abdurrahmanmahmud5981"
+    },
+    {
+      "name": "Shoyon Kumar",
+      "email": "shoyonkumar143@gmail.com",
+      "github": "https://github.com/shoyonp"
+    }
+  ],
   "license": "ISC",
-  "description": "AI-powered course management system backend built with Node.js, Express.js, and MongoDB, following the MVC architecture for scalable and secure API development.",
+  "description": "Backend server for AI Scholar – an AI-powered course management system that provides intelligent learning paths, real-time progress tracking, personalized content delivery, and smart assessments. Built with Node.js, Express.js, and MongoDB to ensure secure, scalable, and efficient educational services for students, instructors, and administrators.",
   "dependencies": {
     "@google/generative-ai": "^0.24.0",
     "axios": "^1.8.4",

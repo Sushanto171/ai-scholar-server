@@ -1,5 +1,5 @@
-const User = require("../models/userModels");
-const { sendResponse } = require("../utils");
+const User = require("../../models/userModel");
+const { sendResponse } = require("../../utils/responseHandler");
 
 // SAVE USER DATA ON DATABASE (POST /users)
 const createUser = async (req, res, next) => {
@@ -24,7 +24,7 @@ const createUser = async (req, res, next) => {
       true,
       isUser
         ? "User already existing the database"
-        : "Successfully users created",
+        : "Successfully user created",
       result
     );
   } catch (error) {

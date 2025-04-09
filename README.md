@@ -72,6 +72,7 @@ This repository represents the **core engine** of the platform, designed with **
 ```bash
 ai-scholar-server/
 ├── src/
+│   ├── config/            # Configuration files and settings
 │   ├── controllers/       # Handles route logic for different entities
 │   ├── helpers/           # Utility functions and helper modules
 │   ├── middlewares/       # Custom middleware for auth, validation, error handling
@@ -79,7 +80,8 @@ ai-scholar-server/
 │   ├── routes/            # API route definitions
 │   ├── services/          # Business logic and third-party integrations
 │   ├── utils/             # Reusable utility functions
-│   └── app.js             # Express app setup and middleware configuration
+│   ├── validations/       # Required Validations
+│   └── server.js          # Express server setup and middleware configuration
 ├── uploads/               # Uploaded media storage (temporary or permanent)
 ├── .env                   # Environment variables
 ├── .gitignore             # Ignored files for Git

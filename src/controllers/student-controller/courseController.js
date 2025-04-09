@@ -53,8 +53,8 @@ const getAllStudentViewCourses = async (req, res) => {
       success: true,
       data: coursesList,
     });
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Some error occured!",
@@ -79,8 +79,8 @@ const getStudentViewCourseDetails = async (req, res) => {
       success: true,
       data: courseDetails,
     });
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Some error occured!",
@@ -88,8 +88,7 @@ const getStudentViewCourseDetails = async (req, res) => {
   }
 };
 
-
 module.exports = {
   getAllStudentViewCourses,
-  getStudentViewCourseDetails
+  getStudentViewCourseDetails,
 };

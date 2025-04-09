@@ -2,7 +2,6 @@ const express = require("express");
 const {
   getStudentViewCourseDetails,
   getAllStudentViewCourses,
-  checkCoursePurchaseInfo,
 } = require("../../controllers/student-controller/course-controller");
 
 const router = express.Router();

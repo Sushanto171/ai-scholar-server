@@ -170,10 +170,11 @@ npm start
 
 ### 👤 User Endpoints
 
-| Endpoint | Method | Description         | Auth   |
-| -------- | ------ | ------------------- | ------ |
-| `/users` | POST   | Save new user to DB | Public |
-| `/users` | GET    | Get all users       | Admin  |
+| Endpoint     | Method | Description         | Auth   |
+| ------------ | ------ | ------------------- | ------ |
+| `/users`     | POST   | Save new user to DB | Public |
+| `/users`     | GET    | Get all users       | Admin  |
+| `/users/:id` | PATCH  | Update user's role  | Admin  |
 
 ### 🎬 Media Upload Endpoints
 

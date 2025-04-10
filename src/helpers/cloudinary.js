@@ -1,29 +1,29 @@
 const { cloudinary } = require("../config/cloudinaryConfig");
 
-// Function to upload media to Cloudinary
+// 💠 UPLOAD MEDIA FILE TO CLOUDINARY (IMAGES, VIDEOS, ETC.)
 const uploadMediaToCloudinary = async (filePath) => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
       resource_type: "auto",
     });
-
     return result;
   } catch (error) {
-    console.error(error);
-    throw new Error("Error uploading to Cloudinary");
+    console.error("CLOUDINARY UPLOAD ERROR:", error);
+    throw new Error("ERROR WHILE UPLOADING FILE TO CLOUDINARY");
   }
 };
 
-// Function to delete media from Cloudinary
+// 💠 DELETE MEDIA FILE FROM CLOUDINARY BY PUBLIC ID
 const deleteMediaFromCloudinary = async (publicId) => {
   try {
     await cloudinary.uploader.destroy(publicId);
   } catch (error) {
-    console.error(error);
-    throw new Error("Failed to delete asset from Cloudinary");
+    console.error("CLOUDINARY DELETE ERROR:", error);
+    throw new Error("ERROR WHILE DELETING FILE FROM CLOUDINARY");
   }
 };
 
+// ✨ EXPORTING CLOUDINARY UTILITY FUNCTIONS
 module.exports = {
   uploadMediaToCloudinary,
   deleteMediaFromCloudinary,

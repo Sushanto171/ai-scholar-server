@@ -1,9 +1,15 @@
+/**
+ * @DESC LOGGER MIDDLEWARE
+ * @DESC LOGS EACH INCOMING REQUEST WITH METHOD, URL, HOSTNAME, AND TIME
+ */
 const logger = (req, res, next) => {
   console.log(
-    `⚡ Req from ${req.hostname} || ${req.method} - ${
+    `📢 REQUEST FROM: ${req.hostname} | METHOD: ${req.method} | URL: ${
       req.url
-    } at ${new Date().toLocaleTimeString()}`
+    } | TIME: ${new Date().toLocaleTimeString()}`
   );
+
+  // CONTINUE TO NEXT MIDDLEWARE OR ROUTE HANDLER
   next();
 };
 

@@ -1,12 +1,18 @@
-const express = require("express");
-const { getUsers, createUser } = require("../../controllers/admin-controller/userController");
+const {
+  createUser,
+  getUsers,
+  updateUserRole,
+} = require("../../controllers/admin-controller/userController");
 
-const router = express.Router();
+const router = require("express").Router();
 
-// SAVE USER DATA ON DATABASE (POST /users)
+// 🔸 CREATE NEW USER OR RETURN EXISTING USER (POST /users)
 router.post("/", createUser);
 
-// GET ALL USER'S DATA FROM DATABASE (GET /users)
+// 🔸 GET ALL USERS DATA FROM DATABASE (GET /users)
 router.get("/", getUsers);
+
+// 🔸 UPDATE USER ROLE BY ADMIN (PATCH /users/:id)
+router.patch("/:id", updateUserRole);
 
 module.exports = router;

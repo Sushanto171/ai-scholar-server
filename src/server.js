@@ -13,17 +13,17 @@ const studentViewCourseRoutes = require("./routes/student-routes/courseRoutes");
 
 // 🛠 Middleware & Config
 const logger = require("./middlewares/logger");
-const { globalErrorHandler } = require("./middlewares/errorHandlers");
+const { globalErrorHandler } = require("./middlewares/globalErrorHandler");
 const { configureCloudinary } = require("./config/cloudinaryConfig");
 
 // 🔧 App & DB Setup
 const app = express();
 const DB_URI = process.env.DB_URI;
 
-// ☁️ Configure Cloudinary
+// 🌀 Configure Cloudinary
 configureCloudinary();
 
-// 🔌 Middlewares
+// 📡 Middlewares
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));

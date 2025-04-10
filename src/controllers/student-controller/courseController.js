@@ -1,7 +1,9 @@
 const Course = require("../../models/courseModel");
-// const StudentCourses = require("../../models/StudentCourses");
+const { sendResponse } = require("../../utils/responseHandler");
+const { checkId } = require("../../validations/idValidation");
 
-const getAllStudentViewCourses = async (req, res) => {
+// 🔸 GET ALL COURSES FOR STUDENT VIEW (GET /student/courses/get-courses)
+const getAllStudentViewCourses = async (req, res, next) => {
   try {
     const {
       category = [],
@@ -10,9 +12,9 @@ const getAllStudentViewCourses = async (req, res) => {
       sortBy = "price-lowtohigh",
     } = req.query;
 
-    console.log(req.query, "req.query");
-
+    // BUILDING FILTER QUERY BASED ON PROVIDED PARAMETERS
     let filters = {};
+
     if (category.length) {
       filters.category = { $in: category.split(",") };
     }
@@ -23,71 +25,85 @@ const getAllStudentViewCourses = async (req, res) => {
       filters.primaryLanguage = { $in: primaryLanguage.split(",") };
     }
 
+    // SETTING SORT PARAMETERS BASED ON SORT OPTION
     let sortParam = {};
+
     switch (sortBy) {
       case "price-lowtohigh":
         sortParam.pricing = 1;
-
         break;
       case "price-hightolow":
         sortParam.pricing = -1;
-
         break;
       case "title-atoz":
         sortParam.title = 1;
-
         break;
       case "title-ztoa":
         sortParam.title = -1;
-
         break;
-
       default:
         sortParam.pricing = 1;
         break;
     }
 
+    // FETCHING COURSES FROM DATABASE USING FILTERS AND SORT OPTIONS
     const coursesList = await Course.find(filters).sort(sortParam);
 
-    res.status(200).json({
-      success: true,
-      data: coursesList,
-    });
+    // SENDING SUCCESSFUL RESPONSE WITH COURSE LIST
+    return sendResponse(
+      res,
+      200,
+      true,
+      "FETCHED ALL COURSES SUCCESSFULLY",
+      coursesList
+    );
   } catch (error) {
-    console.log(error);
+    console.error("ERROR WHILE FETCHING COURSES:", error);
     res.status(500).json({
       success: false,
-      message: "Some error occured!",
+      message: "INTERNAL SERVER ERROR",
     });
+    next(error);
   }
 };
 
-const getStudentViewCourseDetails = async (req, res) => {
+// 🔸 GET COURSE DETAILS BY ID (GET /student/courses/get-course/details/:id)
+const getStudentViewCourseDetails = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const courseDetails = await Course.findById(id);
+    const courseId = req?.params?.id;
 
-    if (!courseDetails) {
-      return res.status(404).json({
-        success: false,
-        message: "No course details found",
-        data: null,
-      });
+    // VALIDATING MONGODB OBJECT ID
+    const isValidId = checkId(courseId);
+    if (!isValidId) {
+      return sendResponse(res, 400, false, "INVALID COURSE ID");
     }
 
-    res.status(200).json({
-      success: true,
-      data: courseDetails,
-    });
+    // QUERYING COURSE DETAILS FROM DATABASE
+    const courseDetails = await Course.findById(courseId);
+
+    if (!courseDetails) {
+      return sendResponse(res, 404, false, "COURSE NOT FOUND");
+    }
+
+    // SENDING SUCCESSFUL RESPONSE WITH COURSE DATA
+    return sendResponse(
+      res,
+      200,
+      true,
+      "COURSE DETAILS RETRIEVED SUCCESSFULLY",
+      courseDetails
+    );
   } catch (error) {
-    console.log(error);
+    console.error("ERROR WHILE FETCHING COURSE DETAILS:", error);
     res.status(500).json({
       success: false,
-      message: "Some error occured!",
+      message: "INTERNAL SERVER ERROR",
     });
+    next(error);
   }
 };
 
+// 💫 EXPORTING CONTROLLER FUNCTIONS
 module.exports = {
   getAllStudentViewCourses,
   getStudentViewCourseDetails,

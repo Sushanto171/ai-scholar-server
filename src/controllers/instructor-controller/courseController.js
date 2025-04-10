@@ -2,182 +2,175 @@ const Course = require("../../models/courseModel");
 const { sendResponse } = require("../../utils/responseHandler");
 const { checkId } = require("../../validations/idValidation");
 
-// CREATE A NEW COURSE (POST /courses/add-course)
+// 🔹 CREATE A NEW COURSE (POST /courses/add-course)
 const addNewCourse = async (req, res, next) => {
   try {
     const courseData = req.body;
 
-    // Validate required fields
+    // VALIDATE COURSE DATA
     if (!courseData) {
-      return sendResponse(res, 400, false, "All fields are required");
+      return sendResponse(res, 400, false, "ALL FIELDS ARE REQUIRED");
     }
 
-    const newlyCreatedCourse = new Course(courseData);
-    const saveCourse = await newlyCreatedCourse.save();
+    const newCourse = new Course(courseData);
+    const savedCourse = await newCourse.save();
 
-    if (saveCourse) {
-      // Send response to client
-      sendResponse(res, 201, true, "Course created successfully", saveCourse);
-    }
+    sendResponse(res, 201, true, "COURSE CREATED SUCCESSFULLY", savedCourse);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Some error occurred!",
-    });
     next(error);
   }
 };
 
-// GET ALL COURSES (GET /courses/get-courses)
+// 🔹 GET ALL COURSES WITH FILTERS (GET /courses/get-courses)
 const getAllCourses = async (req, res, next) => {
   try {
     const { category, limit = 6, skip } = req.query;
 
-    let courses = await Course.find(category ? { category } : {})
-      .limit(limit)
-      .skip(skip);
+    // QUERY FILTER BY CATEGORY IF PROVIDED
+    const query = category ? { category } : {};
+    const courses = await Course.find(query).limit(limit).skip(skip);
 
     if (courses.length === 0) {
-      sendResponse(res, 404, false, "Courses not found");
-      return;
+      return sendResponse(res, 404, false, "NO COURSES FOUND");
     }
 
-    // Send response to client
-    sendResponse(res, 200, true, "Fetched all courses successfully", courses);
+    sendResponse(res, 200, true, "COURSES FETCHED SUCCESSFULLY", courses);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Some error occurred!",
-    });
     next(error);
   }
 };
 
-// GET A COURSE DETAILS BY ID (GET /courses/get-course/details/:id)
-const getCourseDetailsByID = async (req, res, next) => {
+// 🔹 GET ALL COURSES FOR INSTRUCTOR (GET /courses/get-all-courses)
+const getAllCoursesForInstructor = async (req, res, next) => {
   try {
-    const courseId = req?.params?.id;
+    const courses = await Course.find();
 
-    // Validate
-    const isValidId = checkId(courseId);
-    if (!isValidId) {
-      return sendResponse(res, 400, false, "Invalid id");
+    if (!courses || courses.length === 0) {
+      return sendResponse(res, 404, false, "NO COURSES AVAILABLE");
     }
 
-    // Query into database
+    sendResponse(res, 200, true, "ALL COURSES FETCHED SUCCESSFULLY", courses);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+// 🔹 GET COURSE DETAILS BY ID (GET /courses/get-course/details/:id)
+const getCourseDetailsByID = async (req, res, next) => {
+  try {
+    const courseId = req.params.id;
+
+    // VALIDATE MONGODB ID
+    if (!checkId(courseId)) {
+      return sendResponse(res, 400, false, "INVALID COURSE ID");
+    }
+
     const courseDetails = await Course.findById(courseId);
 
     if (!courseDetails) {
-      return sendResponse(res, 404, false, "Course not found");
+      return sendResponse(res, 404, false, "COURSE NOT FOUND");
     }
 
-    // Send response to client
     sendResponse(
       res,
       200,
       true,
-      "Fetching success by course id ",
+      "COURSE DETAILS FETCHED SUCCESSFULLY",
       courseDetails
     );
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Some error occurred!",
-    });
     next(error);
   }
 };
 
-// UPDATE A COURSE BY ID (PUT /courses/update/:id)
+// 🔹 UPDATE A COURSE BY ID (PUT /courses/update/:id)
 const updateCourseByID = async (req, res, next) => {
   try {
-    const courseId = req?.params?.id;
+    const courseId = req.params.id;
 
-    // Validate
-    const isValidId = checkId(courseId);
-    if (!isValidId) {
-      return sendResponse(res, 400, false, "Invalid id");
+    // VALIDATE MONGODB ID
+    if (!checkId(courseId)) {
+      return sendResponse(res, 400, false, "INVALID COURSE ID");
     }
 
     const updatedCourseData = req.body;
-    const nowUpdate = { $set: updatedCourseData };
-    const updatedCourse = await Course.findByIdAndUpdate(courseId, nowUpdate, {
-      new: true,
-    });
+    const updatedCourse = await Course.findByIdAndUpdate(
+      courseId,
+      { $set: updatedCourseData },
+      { new: true, runValidators: true }
+    );
 
-    // Validate
     if (!updatedCourse) {
-      return sendResponse(res, 404, false, "Course not found");
+      return sendResponse(res, 404, false, "COURSE NOT FOUND");
     }
 
-    // Send response to client
-    sendResponse(res, 200, true, "Course updated successfully", updatedCourse);
+    sendResponse(res, 200, true, "COURSE UPDATED SUCCESSFULLY", updatedCourse);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Some error occurred!",
-    });
     next(error);
   }
 };
 
-// DELETE A COURSE BY ID (DELETE /courses/delete/:id)
+// 🔹 DELETE A COURSE BY ID (DELETE /courses/delete/:id)
 const deleteCourseById = async (req, res, next) => {
   try {
-    const courseId = req?.params?.id;
+    const courseId = req.params.id;
 
-    // Validate
-    const isValidId = checkId(courseId);
-    if (!isValidId) {
-      return sendResponse(res, 400, false, "Invalid id");
+    // VALIDATE MONGODB ID
+    if (!checkId(courseId)) {
+      return sendResponse(res, 400, false, "INVALID COURSE ID");
     }
 
-    const result = await Course.findOneAndDelete({ _id: courseId });
+    const deletedCourse = await Course.findByIdAndDelete(courseId);
+    if (!deletedCourse) {
+      return sendResponse(res, 404, false, "COURSE NOT FOUND");
+    }
 
-    // Send response to client
-    sendResponse(res, 200, true, "Successfully deleted the course", result);
+    sendResponse(res, 200, true, "COURSE DELETED SUCCESSFULLY", deletedCourse);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Some error occurred!",
-    });
     next(error);
   }
 };
 
-// GET ALL CATEGORY LIST (GET /courses/categories)
+// 🔹 GET ALL UNIQUE COURSE CATEGORIES (GET /courses/categories)
 const getCategoryList = async (req, res, next) => {
   try {
     const result = await Course.find({}, "category");
 
-    let categories = [];
-
+    const categories = [];
     result.forEach((course) => {
       if (!categories.some((item) => item.category === course.category)) {
         categories.push({ category: course.category, _id: course._id });
       }
     });
 
-    // Send response to client
-    sendResponse(res, 200, true, "Successfully get all categories", categories);
+    if (categories.length === 0) {
+      return sendResponse(res, 404, false, "NO CATEGORIES FOUND");
+    }
+
+    sendResponse(
+      res,
+      200,
+      true,
+      "FETCHED ALL CATEGORIES SUCCESSFULLY",
+      categories
+    );
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Some error occurred!",
-    });
     next(error);
   }
 };
 
+// 💠 EXPORT CONTROLLERS
 module.exports = {
   addNewCourse,
   getAllCourses,
+  getAllCoursesForInstructor,
   getCourseDetailsByID,
   updateCourseByID,
   deleteCourseById,

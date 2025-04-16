@@ -38,8 +38,8 @@ const getUsers = async (req, res, next) => {
 // 🔸 UPDATE USER ROLE BY ADMIN (PATCH /users/:id)
 const updateUserRole = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { role } = req.body;
+t { id } = req.params;
+    const { role } = req.body;    cons
 
     // Validate role
     const allowedRoles = ["student", "instructor", "admin"];

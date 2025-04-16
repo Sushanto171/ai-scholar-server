@@ -65,8 +65,19 @@ const updateUserRole = async (req, res, next) => {
   }
 };
 
+const singleUser = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    const userProfile = await User.findOne({ email });
+    sendResponse(res, 200, true, "get user successfully", userProfile);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createUser,
   getUsers,
   updateUserRole,
+  singleUser
 };

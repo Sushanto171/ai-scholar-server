@@ -38,8 +38,8 @@ const getUsers = async (req, res, next) => {
 // 🔸 UPDATE USER ROLE BY ADMIN (PATCH /users/:id)
 const updateUserRole = async (req, res, next) => {
   try {
-t { id } = req.params;
-    const { role } = req.body;    cons
+    const { id } = req.params;
+    const { role } = req.body;
 
     // Validate role
     const allowedRoles = ["student", "instructor", "admin"];
@@ -63,8 +63,19 @@ t { id } = req.params;
   }
 };
 
+const singleUser = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    const userProfile = await User.findOne({ email });
+    sendResponse(res, 200, true, "get user successfully", userProfile);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createUser,
   getUsers,
   updateUserRole,
+  singleUser
 };

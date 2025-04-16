@@ -1,4 +1,4 @@
-const User = require("../../models/userModel");
+const User = require("../../models/User");
 const { sendResponse } = require("../../utils/responseHandler");
 
 // 🔸 CREATE NEW USER OR RETURN EXISTING USER (POST /users)
@@ -39,9 +39,7 @@ const getUsers = async (req, res, next) => {
 const updateUserRole = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log("id...",id)
     const { role } = req.body;
-    console.log("id...",role)
 
     // Validate role
     const allowedRoles = ["student", "instructor", "admin"];

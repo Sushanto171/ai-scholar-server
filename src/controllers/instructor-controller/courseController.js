@@ -1,4 +1,4 @@
-const Course = require("../../models/courseModel");
+const Course = require("../../models/Course");
 const { sendResponse } = require("../../utils/responseHandler");
 const { checkId } = require("../../validations/idValidation");
 

@@ -1,4 +1,5 @@
-const Course = require("../../models/courseModel");
+const Course = require("../../models/Course");
+const StudentCourses = require("../../models/StudentCourses");
 const { sendResponse } = require("../../utils/responseHandler");
 const { checkId } = require("../../validations/idValidation");
 
@@ -103,8 +104,32 @@ const getStudentViewCourseDetails = async (req, res, next) => {
   }
 };
 
+// 🔸 CHECK PURCHASE INFO (GET /student/courses/purchase-info/:id/:studentId)
+const checkCoursePurchaseInfo = async (req, res) => {
+  try {
+    const { id, studentId } = req.params;
+    const studentCourses = await StudentCourses.findOne({
+      userId: studentId,
+    });
+
+    const ifStudentAlreadyBoughtCurrentCourse =
+      studentCourses.courses.findIndex((item) => item.courseId === id) > -1;
+    res.status(200).json({
+      success: true,
+      data: ifStudentAlreadyBoughtCurrentCourse,
+    });
+  } catch (error) {
+    console.error("ERROR WHILE FETCHING COURSE BOUGHT DETAILS:", error);
+    res.status(500).json({
+      success: false,
+      message: "INTERNAL SERVER ERROR",
+    });
+  }
+};
+
 // 💫 EXPORTING CONTROLLER FUNCTIONS
 module.exports = {
   getAllStudentViewCourses,
   getStudentViewCourseDetails,
+  checkCoursePurchaseInfo,
 };

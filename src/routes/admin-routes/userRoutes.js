@@ -2,6 +2,9 @@ const {
   createUser,
   getUsers,
   updateUserRole,
+  updateUserRoleByEmail,
+  updateUserInstructorStatusByEmail,
+
 } = require("../../controllers/admin-controller/userController");
 
 const router = require("express").Router();
@@ -14,5 +17,7 @@ router.get("/", getUsers);
 
 // 🔸 UPDATE USER ROLE BY ADMIN (PATCH /users/:id)
 router.patch("/:id", updateUserRole);
+router.patch("/user/:email", updateUserRoleByEmail);
+router.patch("/status/:email", updateUserInstructorStatusByEmail);
 
 module.exports = router;

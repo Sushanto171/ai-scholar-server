@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "", // OPTIONAL PROFILE IMAGE
     },
+    instructorStatus: {
+      type: String,
+      default: "", // OPTIONAL PROFILE IMAGE
+    },
   },
   {
     timestamps: true, // AUTOMATICALLY ADDS CREATED_AT AND UPDATED_AT FIELDS

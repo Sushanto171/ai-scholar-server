@@ -65,19 +65,92 @@ const updateUserRole = async (req, res, next) => {
   }
 };
 
+// get a user by email
 const singleUser = async (req, res, next) => {
   try {
-    const email = req.params.email;
+    const email = req.params.email; // or req.params.email depending on your route
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email is required" });
+    }
+
     const userProfile = await User.findOne({ email });
-    sendResponse(res, 200, true, "get user successfully", userProfile);
+
+    if (!userProfile) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User fetched successfully",
+      data: userProfile
+    });
   } catch (error) {
     next(error);
   }
 };
+// update a user by email
+const updateUser = async (req, res, next) => {
+  try {
+    const userData = req.params.email;
+    const { name, about, email } = req.body;
+
+    const updateDoc = {
+      $set: {
+        name,
+        email,
+        about,
+      },
+    };
+
+    const result = await User.findOneAndUpdate(
+      { email: userData },
+      updateDoc,
+      { new: true }
+    );
+
+    res.send({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+// update profile by email
+const updateProfileImage = async (req, res, next) => {
+  try {
+    const { email } = req.params;
+    const { image } = req.body;
+
+    if (!email || !image) {
+      return res.status(400).json({ message: "Email and image URL are required." });
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { email },
+      { $set: { image } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({
+      message: "Profile image updated successfully.",
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating profile image:", error);
+    next(error);
+  }
+};
+
+
 
 module.exports = {
   createUser,
   getUsers,
   updateUserRole,
-  singleUser
+  singleUser,
+  updateUser,
+  updateProfileImage
 };

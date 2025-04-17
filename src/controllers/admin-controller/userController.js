@@ -66,92 +66,161 @@ const updateUserRole = async (req, res, next) => {
   }
 };
 // 🔸 UPDATE USER ROLE BY ADMIN (PATCH /users/:email)
-const updateUserRoleByEmail = async (req, res, next) => {
-  try {
-    const { email } = req.params;
-    console.log("id...", email);
-    const { role, instructorStatus } = req.body;
-    console.log("role...", role, instructorStatus);
+// const updateUserRoleByEmail = async (req, res, next) => {
+//   try {
+//     const { email } = req.params;
+//     console.log("id...", email);
+//     const { role, instructorStatus } = req.body;
+//     console.log("role...", role, instructorStatus);
 
-    // Validate role
-    const allowedRoles = ["student", "instructor", "admin"];
-    if (!allowedRoles.includes(role)) {
-      return sendResponse(res, 400, false, "Invalid role provided");
-    }
+//     // Validate role
+//     const allowedRoles = ["student", "instructor", "admin"];
+//     if (!allowedRoles.includes(role)) {
+//       return sendResponse(res, 400, false, "Invalid role provided");
+//     }
 
-    const updatedUserbyEmaill = await User.findOneAndUpdate(
-      { email },
-      { role,instructorStatus },
+//     const updatedUserbyEmaill = await User.findOneAndUpdate(
+//       { email },
+//       { role,instructorStatus },
       
-      { new: true, runValidators: true }
-    );
+//       { new: true, runValidators: true }
+//     );
 
-    if (!updatedUserbyEmaill) {
-      return sendResponse(res, 404, false, "User not found");
-    }
+//     if (!updatedUserbyEmaill) {
+//       return sendResponse(res, 404, false, "User not found");
+//     }
 
-    sendResponse(
-      res,
-      200,
-      true,
-      "User role updated successfully",
-      updatedUserbyEmaill
-    );
-  } catch (error) {
-    next(error);
-  }
-};
+//     sendResponse(
+//       res,
+//       200,
+//       true,
+//       "User role updated successfully",
+//       updatedUserbyEmaill
+//     );
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 // 🔸 UPDATE USER ROLE BY ADMIN (PATCH /users/:email)
-const updateUserInstructorStatusByEmail = async (req, res, next) => {
-  try {
-    const { email } = req.params;
-    console.log("id...", email);
-    const { instructorStatus } = req.body;
-    console.log("instructorStatus...", instructorStatus);
+// const updateUserInstructorStatusByEmail = async (req, res, next) => {
+//   try {
+//     const { email } = req.params;
+//     console.log("id...", email);
+//     const { instructorStatus } = req.body;
+//     console.log("instructorStatus...", instructorStatus);
 
-    // Validate role
-    // const allowedRoles = ["student", "instructor", "admin"];
-    // if (!allowedRoles.includes(role)) {
-    //   return sendResponse(res, 400, false, "Invalid role provided");
-    // }
+//     // Validate role
+//     // const allowedRoles = ["student", "instructor", "admin"];
+//     // if (!allowedRoles.includes(role)) {
+//     //   return sendResponse(res, 400, false, "Invalid role provided");
+//     // }
 
-    const updatedUserbyEmailt = await User.findOneAndUpdate(
-      { email },
-      { instructorStatus },
-      { new: true, runValidators: true }
-    );
+//     const updatedUserbyEmailt = await User.findOneAndUpdate(
+//       { email },
+//       { instructorStatus },
+//       { new: true, runValidators: true }
+//     );
 
-    if (!updatedUserbyEmailt) {
-      return sendResponse(res, 404, false, "User not found");
-    }
+//     if (!updatedUserbyEmailt) {
+//       return sendResponse(res, 404, false, "User not found");
+//     }
 
-    sendResponse(
-      res,
-      200,
-      true,
-      "User role updated successfully",
-      updatedUserbyEmailt
-    );
-  } catch (error) {
-    next(error);
-  }
-};
+//     sendResponse(
+//       res,
+//       200,
+//       true,
+//       "User role updated successfully",
+//       updatedUserbyEmailt
+//     );
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 const singleUser = async (req, res, next) => {
   try {
-    const email = req.params.email;
+    const email = req.params.email; // or req.params.email depending on your route
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email is required" });
+    }
+
     const userProfile = await User.findOne({ email });
-    sendResponse(res, 200, true, "get user successfully", userProfile);
+
+    if (!userProfile) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User fetched successfully",
+      data: userProfile
+    });
   } catch (error) {
     next(error);
   }
 };
+// update a user by email
+const updateUser = async (req, res, next) => {
+  try {
+    const userData = req.params.email;
+    const { name, about, email } = req.body;
+
+    const updateDoc = {
+      $set: {
+        name,
+        email,
+        about,
+      },
+    };
+
+    const result = await User.findOneAndUpdate(
+      { email: userData },
+      updateDoc,
+      { new: true }
+    );
+
+    res.send({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+// update profile by email
+const updateProfileImage = async (req, res, next) => {
+  try {
+    const { email } = req.params;
+    const { image } = req.body;
+
+    if (!email || !image) {
+      return res.status(400).json({ message: "Email and image URL are required." });
+    }
+    const updatedUser = await User.findOneAndUpdate(
+      { email },
+      { $set: { image } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({
+      message: "Profile image updated successfully.",
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating profile image:", error);
+    next(error);
+  }
+};
+
+
 
 module.exports = {
   createUser,
   getUsers,
   updateUserRole,
-  updateUserRoleByEmail,
-  updateUserInstructorStatusByEmail,
-  singleUser
+  singleUser,
+  updateUser,
+  updateProfileImage
 };

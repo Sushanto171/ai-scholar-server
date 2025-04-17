@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true, // ENCRYPTED PASSWORD
     },
+    about:{
+      type: String,
+      required:true
+    },
     role: {
       type: String,
       enum: ["student", "instructor", "admin"], // ALLOWED USER ROLES

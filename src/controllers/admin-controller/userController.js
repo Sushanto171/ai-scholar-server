@@ -81,8 +81,8 @@ const updateUserRoleByEmail = async (req, res, next) => {
 
     const updatedUserbyEmaill = await User.findOneAndUpdate(
       { email },
-      { role },
-      { instructorStatus },
+      { role,instructorStatus },
+      
       { new: true, runValidators: true }
     );
 
@@ -115,13 +115,13 @@ const updateUserInstructorStatusByEmail = async (req, res, next) => {
     //   return sendResponse(res, 400, false, "Invalid role provided");
     // }
 
-    const updatedUserbyEmail = await User.findOneAndUpdate(
+    const updatedUserbyEmailt = await User.findOneAndUpdate(
       { email },
       { instructorStatus },
       { new: true, runValidators: true }
     );
 
-    if (!updatedUserbyEmail) {
+    if (!updatedUserbyEmailt) {
       return sendResponse(res, 404, false, "User not found");
     }
 
@@ -130,7 +130,7 @@ const updateUserInstructorStatusByEmail = async (req, res, next) => {
       200,
       true,
       "User role updated successfully",
-      updatedUserbyEmail
+      updatedUserbyEmailt
     );
   } catch (error) {
     next(error);

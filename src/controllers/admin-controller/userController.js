@@ -1,4 +1,4 @@
-const User = require("../../models/userModel");
+const User = require("../../models/User");
 const { sendResponse } = require("../../utils/responseHandler");
 
 // 🔸 CREATE NEW USER OR RETURN EXISTING USER (POST /users)
@@ -137,10 +137,21 @@ const updateUserInstructorStatusByEmail = async (req, res, next) => {
   }
 };
 
+const singleUser = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    const userProfile = await User.findOne({ email });
+    sendResponse(res, 200, true, "get user successfully", userProfile);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createUser,
   getUsers,
   updateUserRole,
   updateUserRoleByEmail,
   updateUserInstructorStatusByEmail,
+  singleUser
 };

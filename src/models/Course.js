@@ -41,7 +41,6 @@ const CourseSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true, // COURSE CATEGORY
-    trim: true,
   },
   instructor: {
     instructorName: {
@@ -86,6 +85,7 @@ const CourseSchema = new mongoose.Schema({
   },
   students: [
     {
+      studentId: String,
       studentName: String,
       studentEmail: String,
       paidAmount: String,

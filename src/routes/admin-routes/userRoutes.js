@@ -20,7 +20,6 @@ router.get("/", getUsers);
 router.patch("/:id", updateUserRole);
 router.patch("/user/:email", updateUserRoleByEmail);
 router.patch("/status/:email", updateUserInstructorStatusByEmail);
-
 router.get("/:email", singleUser);
 
 module.exports = router;

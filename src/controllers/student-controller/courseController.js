@@ -26,7 +26,6 @@ const getAllStudentViewCourses = async (req, res, next) => {
       filters.primaryLanguage = { $in: primaryLanguage.split(",") };
     }
 
-    // SETTING SORT PARAMETERS BASED ON SORT OPTION
     let sortParam = {};
 
     switch (sortBy) {
@@ -107,22 +106,40 @@ const getStudentViewCourseDetails = async (req, res, next) => {
 // 🔸 CHECK PURCHASE INFO (GET /student/courses/purchase-info/:id/:studentId)
 const checkCoursePurchaseInfo = async (req, res) => {
   try {
-    const { id, studentId } = req.params;
-    const studentCourses = await StudentCourses.findOne({
-      userId: studentId,
-    });
+    const { id: courseId, studentId } = req.params;
 
-    const ifStudentAlreadyBoughtCurrentCourse =
-      studentCourses.courses.findIndex((item) => item.courseId === id) > -1;
+    // Validate IDs
+    if (!checkId(courseId)) {
+      return res.status(400).json({ 
+        success: false,
+        message: "Invalid course ID" 
+      });
+    }
+
+    if (!checkId(studentId)) {
+      return res.status(400).json({ 
+        success: false,
+        message: "Invalid student ID" 
+      });
+    }
+
+    // Check if student has purchased the course
+    const studentCourses = await StudentCourses.findOne({ userId: studentId });
+    const hasPurchased = studentCourses?.courses.some(
+      course => course.courseId === courseId
+    );
+
     res.status(200).json({
       success: true,
-      data: ifStudentAlreadyBoughtCurrentCourse,
+      data: hasPurchased || false
     });
+
   } catch (error) {
-    console.error("ERROR WHILE FETCHING COURSE BOUGHT DETAILS:", error);
+    console.error("Purchase check error:", error);
     res.status(500).json({
       success: false,
-      message: "INTERNAL SERVER ERROR",
+      message: "Error checking purchase status",
+      error: process.env.NODE_ENV === "development" ? error.message : null
     });
   }
 };

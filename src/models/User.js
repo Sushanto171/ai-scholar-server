@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true, // ENCRYPTED PASSWORD
     },
+    about: {
+      type: String,
+      default: "", // USER'S PROFILE BIO
+    },
     role: {
       type: String,
       enum: ["student", "instructor", "admin"], // ALLOWED USER ROLES
@@ -29,7 +33,7 @@ const userSchema = new mongoose.Schema(
     },
     instructorStatus: {
       type: String,
-      default: "", // OPTIONAL PROFILE IMAGE
+      default: "", // INSTRUCTOR STATUS
     },
     banStatus: {
       type: Boolean,

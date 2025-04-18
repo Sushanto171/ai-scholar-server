@@ -88,7 +88,7 @@ const getCourseDetailsByID = async (req, res, next) => {
   }
 };
 // 🔹 GET COURSE DETAILS BY IInstructor email (GET /courses/get-course/:email)
-const getAllCoursesByInstuctorEmail = async (req, res, next) => {
+const getAllCoursesByInstructorEmail = async (req, res, next) => {
   try {
     const email = req.params.email;
     console.log(email)
@@ -145,7 +145,7 @@ const updateCourseByID = async (req, res, next) => {
   }
 };
 // 🔹 UPDATE A COURSE BY ID (PATCH /courses/course/:id)
-const updateCourseAdvertiseHideandShow = async (req, res, next) => {
+const updateCourseAdvertiseHideAndShow = async (req, res, next) => {
   try {
     const courseId = req.params.id;
     const {status} = req.body
@@ -234,6 +234,6 @@ module.exports = {
   updateCourseByID,
   deleteCourseById,
   getCategoryList,
-  getAllCoursesByInstuctorEmail,
-  updateCourseAdvertiseHideandShow
+  getAllCoursesByInstructorEmail,
+  updateCourseAdvertiseHideAndShow
 };

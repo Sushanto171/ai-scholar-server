@@ -1,6 +1,6 @@
 const StudentCourses = require("../../models/StudentCourses");
 
-// GET STUDENT PURCHASED COURSES
+// 🔸 GET STUDENT PURCHASED COURSES (GET /student/enrolled-courses/get-courses/:studentId)
 const getCoursesByStudentId = async (req, res) => {
   try {
     const { studentId } = req.params;

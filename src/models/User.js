@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "", // OPTIONAL PROFILE IMAGE
     },
+    banStatus: {
+      type: Boolean,
+      default: false, // OPTIONAL PROFILE IMAGE
+    },
   },
   {
     timestamps: true, // AUTOMATICALLY ADDS CREATED_AT AND UPDATED_AT FIELDS

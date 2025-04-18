@@ -91,6 +91,10 @@ const CourseSchema = new mongoose.Schema({
       paidAmount: String,
     },
   ],
+  status: {
+    type: String, // STATUS OF COURSE (e.g., "pending", "approved", "rejected")
+    default: ""
+  },
   curriculum: [LectureSchema], // ARRAY OF LECTURES
   isPublished: {
     type: Boolean,

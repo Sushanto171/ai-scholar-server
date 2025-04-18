@@ -48,20 +48,28 @@ const getUsers = async (req, res, next) => {
 const updateUserRole = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { role } = req.body;
-
-    console.log("USER ID:", id);
-    console.log("REQUESTED ROLE:", role);
-
-    // ALLOWED ROLES VALIDATION
-    const allowedRoles = ["student", "instructor", "admin"];
-    if (!allowedRoles.includes(role)) {
-      return sendResponse(res, 400, false, "INVALID ROLE PROVIDED");
+    console.log("id...", id);
+    const { role , banStatus} = req.body;
+    // console.log("banStatus...",role);
+    console.log("banStatus...", role, banStatus);
+    const updateData = {};
+    // // Validate role
+    // const allowedRoles = ["student", "instructor", "admin"];
+    if (role) {
+     
+      updateData.role = role;
     }
+    
+    
+    if (typeof banStatus === "boolean") {
+      
+      updateData.banStatus = banStatus;
+    }
+    console.log(updateData)
 
     const updatedUser = await User.findByIdAndUpdate(
       id,
-      { role },
+      updateData ,
       { new: true, runValidators: true }
     );
 

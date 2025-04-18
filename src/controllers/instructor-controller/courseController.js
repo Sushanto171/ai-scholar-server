@@ -29,7 +29,8 @@ const getAllCourses = async (req, res, next) => {
 
     // QUERY FILTER BY CATEGORY IF PROVIDED
     const query = category ? { category } : {};
-    const courses = await Course.find(query).limit(limit).skip(skip);
+    // const query ={}
+    const courses = await Course.find(query)
 
     if (courses.length === 0) {
       return sendResponse(res, 404, false, "NO COURSES FOUND");
@@ -86,6 +87,35 @@ const getCourseDetailsByID = async (req, res, next) => {
     next(error);
   }
 };
+// 🔹 GET COURSE DETAILS BY IInstructor email (GET /courses/get-course/:email)
+const getAllCoursesByInstructorEmail = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    console.log(email)
+
+    // VALIDATE MONGODB ID
+    // if (!checkId(courseId)) {
+    //   return sendResponse(res, 400, false, "INVALID COURSE ID");
+    // }
+
+    const courses = await Course.find({ "instructor.instructorEmail": email });
+
+    if (!courses) {
+      return sendResponse(res, 404, false, "COURSE NOT FOUND");
+    }
+
+    sendResponse(
+      res,
+      200,
+      true,
+      "COURSE DETAILS FETCHED SUCCESSFULLY",
+      courses
+    );
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 
 // 🔹 UPDATE A COURSE BY ID (PUT /courses/update/:id)
 const updateCourseByID = async (req, res, next) => {
@@ -101,6 +131,35 @@ const updateCourseByID = async (req, res, next) => {
     const updatedCourse = await Course.findByIdAndUpdate(
       courseId,
       { $set: updatedCourseData },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedCourse) {
+      return sendResponse(res, 404, false, "COURSE NOT FOUND");
+    }
+
+    sendResponse(res, 200, true, "COURSE UPDATED SUCCESSFULLY", updatedCourse);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+// 🔹 UPDATE A COURSE BY ID (PATCH /courses/course/:id)
+const updateCourseAdvertiseHideAndShow = async (req, res, next) => {
+  try {
+    const courseId = req.params.id;
+    const {status} = req.body
+    console.log(courseId, status)
+
+    // VALIDATE MONGODB ID
+    if (!checkId(courseId)) {
+      return sendResponse(res, 400, false, "INVALID COURSE ID");
+    }
+
+    // const updatedCourseData = req.body;
+    const updatedCourse = await Course.findByIdAndUpdate(
+      courseId,
+      { status },
       { new: true, runValidators: true }
     );
 
@@ -175,4 +234,6 @@ module.exports = {
   updateCourseByID,
   deleteCourseById,
   getCategoryList,
+  getAllCoursesByInstructorEmail,
+  updateCourseAdvertiseHideAndShow
 };

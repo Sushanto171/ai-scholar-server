@@ -26,7 +26,6 @@ const getAllStudentViewCourses = async (req, res, next) => {
       filters.primaryLanguage = { $in: primaryLanguage.split(",") };
     }
 
-    // SETTING SORT PARAMETERS BASED ON SORT OPTION
     let sortParam = {};
 
     switch (sortBy) {

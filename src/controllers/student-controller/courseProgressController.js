@@ -1,14 +1,82 @@
-const CourseProgress = require("../../models/CourseProgress");
 const Course = require("../../models/Course");
+const CourseProgress = require("../../models/CourseProgress");
 const StudentCourses = require("../../models/StudentCourses");
 
-// Mark current lecture as viewed
+// 🔸 GET CURRENT COURSE PROGRESS (GET /student/course-progress/get-course/:userId/:courseId)
+const getCurrentCourseProgress = async (req, res) => {
+  try {
+    const { userId, courseId } = req.params;
+
+    // CHECK IF USER HAS PURCHASED THE COURSE
+    const studentCourses = await StudentCourses.findOne({ userId });
+    const hasAccess =
+      studentCourses?.courses?.findIndex((item) => item.courseId === courseId) >
+      -1;
+
+    if (!hasAccess) {
+      return res.status(200).json({
+        success: true,
+        data: {
+          isPurchased: false,
+        },
+        message: "YOU NEED TO PURCHASE THIS COURSE TO ACCESS IT.",
+      });
+    }
+
+    // GET USER'S COURSE PROGRESS
+    const progress = await CourseProgress.findOne({ userId, courseId });
+
+    if (!progress || progress.lecturesProgress.length === 0) {
+      const course = await Course.findById(courseId);
+
+      if (!course) {
+        return res.status(404).json({
+          success: false,
+          message: "COURSE NOT FOUND",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "NO PROGRESS FOUND. YOU CAN START WATCHING THE COURSE.",
+        data: {
+          courseDetails: course,
+          progress: [],
+          isPurchased: true,
+        },
+      });
+    }
+
+    const courseDetails = await Course.findById(courseId);
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        courseDetails,
+        progress: progress.lecturesProgress,
+        completed: progress.completed,
+        completionDate: progress.completionDate,
+        isPurchased: true,
+      },
+    });
+  } catch (error) {
+    console.error("GET COURSE PROGRESS ERROR:", error);
+    return res.status(500).json({
+      success: false,
+      message: "INTERNAL SERVER ERROR",
+    });
+  }
+};
+
+// 🔸 MARK LECTURE AS VIEWED (POST /student/course-progress/mark-lecture-viewed)
 const markCurrentLectureAsViewed = async (req, res) => {
   try {
     const { userId, courseId, lectureId } = req.body;
 
+    // FIND USER PROGRESS FOR THE COURSE
     let progress = await CourseProgress.findOne({ userId, courseId });
 
+    // IF PROGRESS DOES NOT EXIST, CREATE A NEW RECORD
     if (!progress) {
       progress = new CourseProgress({
         userId,
@@ -37,19 +105,20 @@ const markCurrentLectureAsViewed = async (req, res) => {
           dateViewed: new Date(),
         });
       }
+
       await progress.save();
     }
 
+    // VERIFY COURSE EXISTS
     const course = await Course.findById(courseId);
-
     if (!course) {
       return res.status(404).json({
         success: false,
-        message: "Course not found",
+        message: "COURSE NOT FOUND",
       });
     }
 
-    //check all the lectures are viewed or not
+    // CHECK IF ALL LECTURES HAVE BEEN VIEWED
     const allLecturesViewed =
       progress.lecturesProgress.length === course.curriculum.length &&
       progress.lecturesProgress.every((item) => item.viewed);
@@ -57,131 +126,61 @@ const markCurrentLectureAsViewed = async (req, res) => {
     if (allLecturesViewed) {
       progress.completed = true;
       progress.completionDate = new Date();
-
       await progress.save();
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "Lecture marked as viewed",
+      message: "LECTURE MARKED AS VIEWED",
       data: progress,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
+    console.error("MARK LECTURE VIEW ERROR:", error);
+    return res.status(500).json({
       success: false,
-      message: "Some error occurred!",
+      message: "INTERNAL SERVER ERROR",
     });
   }
 };
 
-// Get current course progress
-const getCurrentCourseProgress = async (req, res) => {
-  try {
-    const { userId, courseId } = req.params;
-
-    const studentPurchasedCourses = await StudentCourses.findOne({ userId });
-
-    const isCurrentCoursePurchasedByCurrentUserOrNot =
-      studentPurchasedCourses?.courses?.findIndex(
-        (item) => item.courseId === courseId
-      ) > -1;
-
-    if (!isCurrentCoursePurchasedByCurrentUserOrNot) {
-      return res.status(200).json({
-        success: true,
-        data: {
-          isPurchased: false,
-        },
-        message: "You need to purchase this course to access it.",
-      });
-    }
-
-    const currentUserCourseProgress = await CourseProgress.findOne({
-      userId,
-      courseId,
-    });
-
-    if (
-      !currentUserCourseProgress ||
-      currentUserCourseProgress?.lecturesProgress?.length === 0
-    ) {
-      const course = await Course.findById(courseId);
-      if (!course) {
-        return res.status(404).json({
-          success: false,
-          message: "Course not found",
-        });
-      }
-
-      return res.status(200).json({
-        success: true,
-        message: "No progress found, you can start watching the course",
-        data: {
-          courseDetails: course,
-          progress: [],
-          isPurchased: true,
-        },
-      });
-    }
-
-    const courseDetails = await Course.findById(courseId);
-
-    res.status(200).json({
-      success: true,
-      data: {
-        courseDetails,
-        progress: currentUserCourseProgress.lecturesProgress,
-        completed: currentUserCourseProgress.completed,
-        completionDate: currentUserCourseProgress.completionDate,
-        isPurchased: true,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Some error occurred!",
-    });
-  }
-};
-
-// Reset course progress
+// 🔸 RESET CURRENT COURSE PROGRESS (POST /student/course-progress/reset-progress)
 const resetCurrentCourseProgress = async (req, res) => {
   try {
     const { userId, courseId } = req.body;
 
+    // FIND EXISTING PROGRESS
     const progress = await CourseProgress.findOne({ userId, courseId });
 
     if (!progress) {
       return res.status(404).json({
         success: false,
-        message: "Progress not found!",
+        message: "COURSE PROGRESS NOT FOUND",
       });
     }
 
+    // RESET PROGRESS FIELDS
     progress.lecturesProgress = [];
     progress.completed = false;
     progress.completionDate = null;
 
     await progress.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "Course progress has been reset",
+      message: "COURSE PROGRESS HAS BEEN RESET",
       data: progress,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
+    console.error("RESET COURSE PROGRESS ERROR:", error);
+    return res.status(500).json({
       success: false,
-      message: "Some error occurred!",
+      message: "INTERNAL SERVER ERROR",
     });
   }
 };
 
 module.exports = {
-  markCurrentLectureAsViewed,
   getCurrentCourseProgress,
+  markCurrentLectureAsViewed,
   resetCurrentCourseProgress,
 };

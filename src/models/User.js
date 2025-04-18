@@ -17,9 +17,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true, // ENCRYPTED PASSWORD
     },
-    about:{
+    about: {
       type: String,
-      required:true
+      default: "", // USER'S PROFILE BIO
     },
     role: {
       type: String,
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
     },
     instructorStatus: {
       type: String,
-      default: "", // OPTIONAL PROFILE IMAGE
+      default: "", // INSTRUCTOR STATUS
     },
   },
   {

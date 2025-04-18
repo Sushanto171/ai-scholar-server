@@ -5,35 +5,40 @@ const User = require("../../models/User");
 const CoursePurchase = require("../../models/CoursePurchase");
 const StudentCourses = require("../../models/StudentCourses");
 
+// INITIALIZE STRIPE
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Create Payment Intent
+/**
+ * =====================================================
+ * CREATE PAYMENT INTENT FOR COURSE PURCHASE
+ * =====================================================
+ */
 const createPaymentIntent = async (req, res) => {
   try {
     const { courseId, userId } = req.body;
 
-    // Validate inputs
+    // VALIDATE REQUIRED INPUTS
     if (!courseId || !userId) {
       return res.status(400).json({
         success: false,
-        message: "Course ID and User ID are required",
+        message: "COURSE ID AND USER ID ARE REQUIRED",
       });
     }
 
-    // Get course and user details
+    // FETCH COURSE AND USER DETAILS
     const course = await Course.findById(courseId);
     const user = await User.findById(userId);
 
     if (!course || !user) {
       return res.status(404).json({
         success: false,
-        message: "Course or user not found",
+        message: "COURSE OR USER NOT FOUND",
       });
     }
 
-    // Create payment intent
+    // CREATE STRIPE PAYMENT INTENT
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(course.pricing * 100), // Convert to cents
+      amount: Math.round(course.pricing * 100), // STRIPE EXPECTS AMOUNT IN CENTS
       currency: "usd",
       metadata: {
         courseId: course._id.toString(),
@@ -45,9 +50,10 @@ const createPaymentIntent = async (req, res) => {
         instructorName: course.instructor.instructorName,
         instructorEmail: course.instructor.instructorEmail,
       },
-      description: `Purchase of ${course.title}`,
+      description: `PURCHASE OF ${course.title}`,
     });
 
+    // RETURN CLIENT SECRET AND COURSE DETAILS TO FRONTEND
     res.status(200).json({
       success: true,
       clientSecret: paymentIntent.client_secret,
@@ -60,16 +66,20 @@ const createPaymentIntent = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Payment intent error:", error);
+    console.error("PAYMENT INTENT ERROR:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to create payment intent",
+      message: "FAILED TO CREATE PAYMENT INTENT",
       error: process.env.NODE_ENV === "development" ? error.message : null,
     });
   }
 };
 
-// Confirm Payment and Update Database
+/**
+ * =====================================================
+ * CONFIRM PAYMENT AND UPDATE DATABASE RECORDS
+ * =====================================================
+ */
 const confirmPayment = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -77,25 +87,26 @@ const confirmPayment = async (req, res) => {
   try {
     const { paymentIntentId } = req.body;
 
-    // Verify payment with Stripe
+    // RETRIEVE PAYMENT DETAILS FROM STRIPE
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
+    // VERIFY IF PAYMENT WAS SUCCESSFUL
     if (paymentIntent.status !== "succeeded") {
       return res.status(400).json({
         success: false,
-        message: "Payment not completed",
+        message: "PAYMENT NOT COMPLETED",
       });
     }
 
     const { metadata } = paymentIntent;
     const amount = paymentIntent.amount / 100;
 
-    // Validate required metadata
+    // VALIDATE NECESSARY METADATA FROM STRIPE
     if (!metadata.courseId || !metadata.userId) {
-      throw new Error("Missing required metadata in payment intent");
+      throw new Error("MISSING REQUIRED METADATA IN PAYMENT INTENT");
     }
 
-    // 1. Create purchase record
+    // 1. SAVE COURSE PURCHASE RECORD
     await CoursePurchase.create(
       [
         {
@@ -116,7 +127,7 @@ const confirmPayment = async (req, res) => {
       { session }
     );
 
-    // 2. Update student courses
+    // 2. ADD COURSE TO STUDENT'S ENROLLED COURSES
     await StudentCourses.findOneAndUpdate(
       { userId: metadata.userId },
       {
@@ -134,7 +145,7 @@ const confirmPayment = async (req, res) => {
       { upsert: true, session }
     );
 
-    // 3. Update course enrollment
+    // 3. INCREMENT ENROLLMENT COUNT IN COURSE
     await Course.findByIdAndUpdate(
       metadata.courseId,
       {
@@ -151,19 +162,20 @@ const confirmPayment = async (req, res) => {
       { session }
     );
 
+    // COMMIT TRANSACTION IF EVERYTHING SUCCEEDS
     await session.commitTransaction();
 
     res.status(200).json({
       success: true,
-      message: "Payment confirmed and records updated",
+      message: "PAYMENT CONFIRMED AND RECORDS UPDATED",
       courseId: metadata.courseId,
     });
   } catch (error) {
     await session.abortTransaction();
-    console.error("Payment confirmation error:", error);
+    console.error("PAYMENT CONFIRMATION ERROR:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to confirm payment",
+      message: "FAILED TO CONFIRM PAYMENT",
       error: process.env.NODE_ENV === "development" ? error.message : null,
     });
   } finally {
@@ -171,6 +183,7 @@ const confirmPayment = async (req, res) => {
   }
 };
 
+// EXPORT CONTROLLER FUNCTIONS
 module.exports = {
   createPaymentIntent,
   confirmPayment,

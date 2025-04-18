@@ -1,6 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 
-// Configures Cloudinary SDK with environment variables
+// 🔹 Configures Cloudinary SDK with environment variables
 const configureCloudinary = () => {
   try {
     // Validate required environment variables

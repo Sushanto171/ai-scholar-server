@@ -1,11 +1,10 @@
-const express = require("express");
 const {
   getCurrentCourseProgress,
   markCurrentLectureAsViewed,
   resetCurrentCourseProgress,
 } = require("../../controllers/student-controller/courseProgressController");
 
-const router = express.Router();
+const router = require("express").Router();
 
 // 🔸 GET CURRENT COURSE PROGRESS (GET /student/course-progress/get-course/:userId/:courseId)
 router.get("/get-course/:userId/:courseId", getCurrentCourseProgress);

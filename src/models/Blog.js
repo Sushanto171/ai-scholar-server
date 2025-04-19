@@ -8,6 +8,7 @@ const BlogSchema = new mongoose.Schema(
     postDate: { type: Date, default: Date.now },
     email: { type: String, required: true },
     profile: { type: String, required: true },
+    author: { type: String, required: true },
   },
 );
 

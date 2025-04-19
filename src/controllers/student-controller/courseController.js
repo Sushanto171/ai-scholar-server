@@ -41,6 +41,12 @@ const getAllStudentViewCourses = async (req, res, next) => {
       case "title-ztoa":
         sortParam.title = -1;
         break;
+      case "date-newest":
+        sortParam.date = -1;
+        break;
+      case "date-oldest":
+        sortParam.date = 1;
+        break;
       default:
         sortParam.pricing = 1;
         break;
@@ -67,12 +73,50 @@ const getAllStudentViewCourses = async (req, res, next) => {
   }
 };
 
+// 🔸 SEARCH COURSES (GET /student/courses/search)
+const searchCourses = async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    if (!query || query.length < 2) {
+      return sendResponse(
+        res,
+        400,
+        false,
+        "Search query must be at least 2 characters"
+      );
+    }
+
+    const results = await Course.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
+        { "instructor.instructorName": { $regex: query, $options: "i" } },
+      ],
+    }).limit(20);
+
+    return sendResponse(
+      res,
+      200,
+      true,
+      "Search results fetched successfully",
+      results
+    );
+  } catch (error) {
+    console.error("Search error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error performing search",
+      error: process.env.NODE_ENV === "development" ? error.message : null,
+    });
+  }
+};
+
 // 🔸 GET COURSE DETAILS BY ID (GET /student/courses/get-course/details/:id)
 const getStudentViewCourseDetails = async (req, res, next) => {
   try {
     const courseId = req?.params?.id;
 
-    // VALIDATING MONGODB OBJECT ID
     const isValidId = checkId(courseId);
     if (!isValidId) {
       return sendResponse(res, 400, false, "INVALID COURSE ID");
@@ -110,36 +154,35 @@ const checkCoursePurchaseInfo = async (req, res) => {
 
     // Validate IDs
     if (!checkId(courseId)) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: "Invalid course ID" 
+        message: "Invalid course ID",
       });
     }
 
     if (!checkId(studentId)) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: "Invalid student ID" 
+        message: "Invalid student ID",
       });
     }
 
     // Check if student has purchased the course
     const studentCourses = await StudentCourses.findOne({ userId: studentId });
     const hasPurchased = studentCourses?.courses.some(
-      course => course.courseId === courseId
+      (course) => course.courseId === courseId
     );
 
     res.status(200).json({
       success: true,
-      data: hasPurchased || false
+      data: hasPurchased || false,
     });
-
   } catch (error) {
     console.error("Purchase check error:", error);
     res.status(500).json({
       success: false,
       message: "Error checking purchase status",
-      error: process.env.NODE_ENV === "development" ? error.message : null
+      error: process.env.NODE_ENV === "development" ? error.message : null,
     });
   }
 };
@@ -147,6 +190,7 @@ const checkCoursePurchaseInfo = async (req, res) => {
 // 💫 EXPORTING CONTROLLER FUNCTIONS
 module.exports = {
   getAllStudentViewCourses,
+  searchCourses,
   getStudentViewCourseDetails,
   checkCoursePurchaseInfo,
 };

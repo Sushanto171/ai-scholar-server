@@ -18,8 +18,8 @@ router.post("/", createUser);
 // 🔸 GET ALL USERS DATA FROM DATABASE (GET /users)
 router.get("/", getUsers);
 
-// 🔸 UPDATE USER ROLE BY ID (PATCH /users/:id)
-router.patch("/:id", updateUserRole);
+// 🔸 UPDATE USER ROLE BY ID (PATCH /users/status/:id)
+router.patch("/userId/:id", updateUserRole);
 
 // 🔸 UPDATE USER ROLE BY EMAIL (PATCH /users/:email)
 router.patch("/:email", updateUserRoleByEmail);

@@ -127,9 +127,10 @@ const updateUserRoleByEmail = async (req, res, next) => {
 const updateUserInstructorStatusByEmail = async (req, res, next) => {
   try {
     const { email } = req.params;
-    const { instructorStatus } = req.body;
+    const { role, instructorStatus } = req.body;
 
     console.log("EMAIL:", email);
+    console.log("ROLE:", role);
     console.log("INSTRUCTOR STATUS:", instructorStatus);
 
     const updatedUserByEmail = await User.findOneAndUpdate(
@@ -219,6 +220,36 @@ const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+/* ============================================================
+   🔸 Delete  USER PROFILE BY ID (Delete /users/user/:id)
+=============================================================== */
+const deleteUser = async (req, res, next) => {
+  try {
+    const {id} = req.params;
+    console.log(id)
+
+    // const updateDoc = {
+    //   $set: {
+    //     name,
+    //     email,
+    //     about,
+    //   },
+    // };
+
+    const updatedUserProfile = await User.findByIdAndDelete(
+      id
+    );
+
+    sendResponse(
+      res,
+      200,
+      true,
+      "USER PROFILE DELETED SUCCESSFULLY"
+    );
+  } catch (error) {
+    next(error);
+  }
+};
 
 /* ==================================================================
    🔸 UPDATE USER PROFILE IMAGE BY EMAIL (PUT /users/image/:email)
@@ -270,4 +301,5 @@ module.exports = {
   singleUser,
   updateUser,
   updateProfileImage,
+  deleteUser
 };

@@ -43,31 +43,35 @@ const getUsers = async (req, res, next) => {
 };
 
 /* ============================================================
-   🔸 UPDATE USER ROLE BY USER ID (PATCH /users/:id)
+   🔸 UPDATE USER ROLE BY USER ID (PATCH /users/status/:id)
 =============================================================== */
 const updateUserRole = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log("id...", id);
-    const { role, banStatus } = req.body;
+    // console.log("id...", id);
+    const { role , banStatus} = req.body;
     // console.log("banStatus...",role);
-    console.log("banStatus...", role, banStatus);
+    // console.log("banStatus...", role, banStatus);
     const updateData = {};
     // // Validate role
     // const allowedRoles = ["student", "instructor", "admin"];
     if (role) {
+     
       updateData.role = role;
     }
-
+    
+    
     if (typeof banStatus === "boolean") {
+      
       updateData.banStatus = banStatus;
     }
-    console.log(updateData);
+    console.log(updateData)
 
-    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      updateData ,
+      { new: true, runValidators: true }
+    );
 
     if (!updatedUser) {
       return sendResponse(res, 404, false, "USER NOT FOUND");
@@ -216,6 +220,36 @@ const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+/* ============================================================
+   🔸 Delete  USER PROFILE BY ID (Delete /users/user/:id)
+=============================================================== */
+const deleteUser = async (req, res, next) => {
+  try {
+    const {id} = req.params;
+    console.log(id)
+
+    // const updateDoc = {
+    //   $set: {
+    //     name,
+    //     email,
+    //     about,
+    //   },
+    // };
+
+    const updatedUserProfile = await User.findByIdAndDelete(
+      id
+    );
+
+    sendResponse(
+      res,
+      200,
+      true,
+      "USER PROFILE DELETED SUCCESSFULLY",
+    );
+  } catch (error) {
+    next(error);
+  }
+};
 
 /* ==================================================================
    🔸 UPDATE USER PROFILE IMAGE BY EMAIL (PUT /users/image/:email)
@@ -257,23 +291,6 @@ const updateProfileImage = async (req, res, next) => {
   }
 };
 
-/* ============================================================
-   🔸 DELETE  USER FROM DATABASE BY ID (Delete /users/user/:id)
-=============================================================== */
-const deleteUser = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-
-    console.log(id);
-
-    const deletedUser = await User.findByIdAndDelete(id);
-
-    sendResponse(res, 200, true, "USER DELETED SUCCESSFULLY");
-  } catch (error) {
-    next(error);
-  }
-};
-
 // 🔹 EXPORT ALL USER CONTROLLER FUNCTIONS
 module.exports = {
   createUser,
@@ -284,5 +301,5 @@ module.exports = {
   singleUser,
   updateUser,
   updateProfileImage,
-  deleteUser,
+  deleteUser
 };

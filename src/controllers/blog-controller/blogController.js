@@ -38,8 +38,33 @@ const getSingleBlog = async (req, res, next) => {
   }
 };
 
+// GET ALL MY BLOGS BY EMAIL
+const AllBlogs = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    console.log(email);
+
+    const totalBlog = await Blog.find({ email }); // use Blog.find instead of just find
+    sendResponse(res, 200, true, "Get all blogs successfully.", totalBlog);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteBlog = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deletedBlog = await Blog.findByIdAndDelete(id);
+    sendResponse(res, 200, true, "blog deleted successfully", deletedBlog);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createBlog,
   getAllBlogs,
-  getSingleBlog
+  getSingleBlog,
+  AllBlogs,
+  deleteBlog
 };

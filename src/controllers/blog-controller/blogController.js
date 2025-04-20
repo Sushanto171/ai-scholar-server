@@ -38,8 +38,79 @@ const getSingleBlog = async (req, res, next) => {
   }
 };
 
+// GET ALL MY BLOGS BY EMAIL
+const AllBlogs = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    console.log(email);
+
+    const totalBlog = await Blog.find({ email }); // use Blog.find instead of just find
+    sendResponse(res, 200, true, "Get all blogs successfully.", totalBlog);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteBlog = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deletedBlog = await Blog.findByIdAndDelete(id);
+    sendResponse(res, 200, true, "blog deleted successfully", deletedBlog);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getDataForUpdate = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    console.log("Getting blog with ID:", id);
+
+    const blogInfo = await Blog.findById(id);
+
+    if (!blogInfo) {
+      return res.status(404).json({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+
+    sendResponse(res, 200, true, "Get a blog successfully", blogInfo);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// PATCH: /blogs/blog/:id
+const updatedBlogById = async(req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const updatedBlog = await Blog.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Blog updated successfully",
+      data: updatedBlog,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+    next(error)
+  }
+};
+
+
+
 module.exports = {
   createBlog,
   getAllBlogs,
-  getSingleBlog
+  getSingleBlog,
+  AllBlogs,
+  deleteBlog,
+  getDataForUpdate,
+  updatedBlogById
 };

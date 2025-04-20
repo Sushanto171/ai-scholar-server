@@ -35,7 +35,8 @@ router.put("/:email", updateUser);
 
 // 🔸 UPDATE USER PROFILE IMAGE BY EMAIL (PUT /users/image/:email)
 router.put("/image/:email", updateProfileImage);
-// 🔸 UPDATE USER PROFILE IMAGE BY EMAIL (PUT /users/image/:email)
+
+// 🔸 DELETE USER FROM DATABASE BY ID (DELETE /users/user/:id)
 router.delete("/user/:id", deleteUser);
 
 module.exports = router;

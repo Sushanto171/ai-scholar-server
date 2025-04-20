@@ -14,9 +14,29 @@ const StudentCoursesSchema = new mongoose.Schema({
         type: String,
         required: true, // ID OF THE PURCHASED COURSE
       },
-      title: {
+      courseTitle: {
         type: String,
         required: true, // TITLE OF THE COURSE
+      },
+      courseImage: {
+        type: String,
+        required: true, // IMAGE OR THUMBNAIL OF THE COURSE
+      },
+      coursePricing: {
+        type: Number,
+        required: true, // PURCHASE AMOUNT OF THE COURSE
+      },
+      courseCategory: {
+        type: String,
+        required: true, // CATEGORY OF THE COURSE
+      },
+      courseLevel: {
+        type: String,
+        required: true, // LEVEL OF THE COURSE
+      },
+      primaryLanguage: {
+        type: String,
+        required: true, // PRIMARY LANGUAGE OF THE COURSE
       },
       instructorName: {
         type: String,
@@ -30,9 +50,9 @@ const StudentCoursesSchema = new mongoose.Schema({
         type: Date,
         required: true, // DATE WHEN THE COURSE WAS PURCHASED
       },
-      courseImage: {
-        type: String,
-        required: true, // IMAGE OR THUMBNAIL OF THE COURSE
+      enrolledStudent: {
+        type: Number,
+        required: true, // NUMBER OF STUDENTS ENROLL THE COURSE
       },
     },
   ],

@@ -1,7 +1,7 @@
 const Blog = require("../../models/Blog");
 const { sendResponse } = require("../../utils/responseHandler");
 
-//create a new blog
+// Create a New Blog
 const createBlog = async (req, res, next) => {
   try {
     const blogData = req.body;
@@ -17,7 +17,7 @@ const createBlog = async (req, res, next) => {
   }
 };
 
-// get all blogs
+// Get All Blogs
 const getAllBlogs = async (req, res, next) => {
   try {
     const blogInfo = await Blog.find();
@@ -27,7 +27,7 @@ const getAllBlogs = async (req, res, next) => {
   }
 };
 
-//get a blog by id
+// Get a Blog by id
 const getSingleBlog = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -51,6 +51,7 @@ const AllBlogs = async (req, res, next) => {
   }
 };
 
+// Delete a Blog
 const deleteBlog = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -61,6 +62,7 @@ const deleteBlog = async (req, res, next) => {
   }
 };
 
+// Get Data For Update
 const getDataForUpdate = async (req, res, next) => {
   try {
     const { id } = req.params;

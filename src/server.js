@@ -7,14 +7,13 @@ const morgan = require("morgan");
 
 // 📁 Routes
 const userRoutes = require("./routes/admin-routes/userRoutes");
-const blogRoutes = require("./routes/blog-routes/blogRoutes");
+const blogRoutes = require("./routes/admin-routes/blogRoutes");
 const courseRoutes = require("./routes/instructor-routes/courseRoutes");
 const mediaRoutes = require("./routes/instructor-routes/mediaRoutes");
 const studentViewCourseRoutes = require("./routes/student-routes/courseRoutes");
 const studentCoursesRoutes = require("./routes/student-routes/studentCoursesRoutes");
 const studentCourseProgressRoutes = require("./routes/student-routes/courseProgressRoutes");
 const coursePurchaseRoutes = require("./routes/student-routes/coursePurchaseRoutes");
-
 
 // 🛠 Middleware & Config
 const logger = require("./middlewares/logger");
@@ -49,7 +48,6 @@ app.use("/student/courses", studentViewCourseRoutes);
 app.use("/student/course-payment", coursePurchaseRoutes);
 app.use("/student/enrolled-courses", studentCoursesRoutes);
 app.use("/student/course-progress", studentCourseProgressRoutes);
-
 
 // 🌐 Root Route
 app.get("/", (req, res) => {

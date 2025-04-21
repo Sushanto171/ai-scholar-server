@@ -1,11 +1,11 @@
 const {
   addNewCourse,
   getAllCourses,
-  getAllCoursesForInstructor,
   getCourseDetailsByID,
   updateCourseByID,
   deleteCourseById,
   getCategoryList,
+  getAllCoursesForInstructor,
   getAllCoursesByInstructorEmail,
   updateCourseAdvertiseHideAndShow,
 } = require("../../controllers/instructor-controller/courseController");
@@ -18,10 +18,10 @@ router.post("/add-course", addNewCourse);
 // 🔹 GET ALL COURSES WITH FILTERS (GET /courses/get-courses)
 router.get("/get-courses", getAllCourses);
 
-// 🔹 GET ALL COURSES WITH FILTERS (GET /courses/instructor/:email)
+// 🔹 GET COURSE DETAILS BY INSTRUCTOR EMAIL (GET /courses/instructor/:email)
 router.get("/instructor/:email", getAllCoursesByInstructorEmail);
 
-// 🔹 Update COURSE WITH ID (PATCH /courses/course/:id)
+// 🔹 UPDATE COURSE ADVERTISE HIDE & SHOW FEATURE (PATCH /courses/course/:id)
 router.patch("/course/:id", updateCourseAdvertiseHideAndShow);
 
 // 🔹 GET ALL COURSES FOR INSTRUCTOR (GET /courses/get-all-courses)

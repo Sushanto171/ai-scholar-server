@@ -82,7 +82,7 @@ const getDataForUpdate = async (req, res, next) => {
 };
 
 // PATCH: /blogs/blog/:id
-const updatedBlogById = async(req, res, next) => {
+const updatedBlogById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
@@ -99,11 +99,9 @@ const updatedBlogById = async(req, res, next) => {
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
-    next(error)
+    next(error);
   }
 };
-
-
 
 module.exports = {
   createBlog,
@@ -112,5 +110,5 @@ module.exports = {
   AllBlogs,
   deleteBlog,
   getDataForUpdate,
-  updatedBlogById
+  updatedBlogById,
 };

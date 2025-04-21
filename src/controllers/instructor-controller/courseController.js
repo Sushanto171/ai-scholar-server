@@ -29,8 +29,8 @@ const getAllCourses = async (req, res, next) => {
 
     // QUERY FILTER BY CATEGORY IF PROVIDED
     const query = category ? { category } : {};
-    // const query ={}
-    const courses = await Course.find(query)
+
+    const courses = await Course.find(query);
 
     if (courses.length === 0) {
       return sendResponse(res, 404, false, "NO COURSES FOUND");
@@ -87,16 +87,12 @@ const getCourseDetailsByID = async (req, res, next) => {
     next(error);
   }
 };
-// 🔹 GET COURSE DETAILS BY IInstructor email (GET /courses/get-course/:email)
+
+// 🔹 GET COURSE DETAILS BY INSTRUCTOR EMAIL (GET /courses/instructor/:email)
 const getAllCoursesByInstructorEmail = async (req, res, next) => {
   try {
     const email = req.params.email;
-    console.log(email)
-
-    // VALIDATE MONGODB ID
-    // if (!checkId(courseId)) {
-    //   return sendResponse(res, 400, false, "INVALID COURSE ID");
-    // }
+    console.log(email);
 
     const courses = await Course.find({ "instructor.instructorEmail": email });
 
@@ -144,12 +140,12 @@ const updateCourseByID = async (req, res, next) => {
     next(error);
   }
 };
-// 🔹 UPDATE A COURSE BY ID (PATCH /courses/course/:id)
+
+// 🔹 UPDATE COURSE ADVERTISE HIDE & SHOW FEATURE (PATCH /courses/course/:id)
 const updateCourseAdvertiseHideAndShow = async (req, res, next) => {
   try {
     const courseId = req.params.id;
-    const {status} = req.body
-    console.log(courseId, status)
+    const { status } = req.body;
 
     // VALIDATE MONGODB ID
     if (!checkId(courseId)) {
@@ -202,6 +198,7 @@ const getCategoryList = async (req, res, next) => {
     const result = await Course.find({}, "category");
 
     const categories = [];
+    
     result.forEach((course) => {
       if (!categories.some((item) => item.category === course.category)) {
         categories.push({ category: course.category, _id: course._id });
@@ -229,11 +226,11 @@ const getCategoryList = async (req, res, next) => {
 module.exports = {
   addNewCourse,
   getAllCourses,
-  getAllCoursesForInstructor,
   getCourseDetailsByID,
   updateCourseByID,
   deleteCourseById,
   getCategoryList,
+  getAllCoursesForInstructor,
   getAllCoursesByInstructorEmail,
-  updateCourseAdvertiseHideAndShow
+  updateCourseAdvertiseHideAndShow,
 };

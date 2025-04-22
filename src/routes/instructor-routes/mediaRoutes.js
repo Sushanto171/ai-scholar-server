@@ -5,6 +5,7 @@ const {
   deleteMediaFromCloudinary,
 } = require("../../helpers/cloudinary");
 
+// 🔹 INITIALIZE EXPRESS ROUTER
 const router = express.Router();
 
 // 🌀 CONFIGURE MULTER FOR TEMPORARY FILE STORAGE
@@ -14,7 +15,6 @@ const upload = multer({
     files: 10, // MAX 10 FILES FOR BULK UPLOAD
   },
   fileFilter: (req, file, cb) => {
-    // ALLOW ONLY IMAGES AND VIDEOS
     if (
       file.mimetype.startsWith("image/") ||
       file.mimetype.startsWith("video/")

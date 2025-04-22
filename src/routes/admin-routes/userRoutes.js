@@ -1,3 +1,4 @@
+// 🔸 IMPORT USER CONTROLLER FUNCTIONS
 const {
   createUser,
   getUsers,
@@ -10,7 +11,14 @@ const {
   deleteUser,
 } = require("../../controllers/admin-controller/userController");
 
+// 🔸 INITIALIZE EXPRESS ROUTER
 const router = require("express").Router();
+
+/** 
+ * ================================
+ *        USER MANAGEMENT ROUTES
+ * ================================
+ */
 
 // 🔸 CREATE NEW USER OR RETURN EXISTING USER (POST /users)
 router.post("/", createUser);

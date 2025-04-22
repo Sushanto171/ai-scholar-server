@@ -1,3 +1,4 @@
+// 🔹 IMPORT INSTRUCTOR COURSE CONTROLLER FUNCTIONS
 const {
   addNewCourse,
   getAllCourses,
@@ -10,7 +11,14 @@ const {
   updateCourseAdvertiseHideAndShow,
 } = require("../../controllers/instructor-controller/courseController");
 
+// 🔹 INITIALIZE EXPRESS ROUTER
 const router = require("express").Router();
+
+/**
+ * ================================
+ *      COURSE MANAGEMENT ROUTES
+ * ================================
+ */
 
 // 🔹 CREATE A NEW COURSE (POST /courses/add-course)
 router.post("/add-course", addNewCourse);

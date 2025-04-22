@@ -1,90 +1,118 @@
 const Blog = require("../../models/Blog");
 const { sendResponse } = require("../../utils/responseHandler");
 
-// Create a New Blog
+/* ============================================================
+   🔸 CREATE A NEW BLOG (POST /blogs)
+=============================================================== */
 const createBlog = async (req, res, next) => {
   try {
     const blogData = req.body;
 
+    // VALIDATE IF BLOG DATA EXISTS
     if (!blogData || Object.keys(blogData).length === 0) {
       return sendResponse(res, 400, false, "ALL FIELDS ARE REQUIRED");
     }
 
-    const result = await Blog.create(blogData);
-    sendResponse(res, 201, true, "BLOG CREATED SUCCESSFULLY", result);
+    // CREATE A NEW BLOG
+    const newBlog = await Blog.create(blogData);
+    sendResponse(res, 201, true, "BLOG CREATED SUCCESSFULLY", newBlog);
   } catch (error) {
     next(error);
   }
 };
 
-// Get All Blogs
+/* ============================================================
+   🔸 GET ALL BLOGS (GET /blogs)
+=============================================================== */
 const getAllBlogs = async (req, res, next) => {
   try {
-    const blogInfo = await Blog.find();
-    sendResponse(res, 200, true, "blog RETRIEVED SUCCESSFULLY", blogInfo);
+    const blogs = await Blog.find();
+    sendResponse(res, 200, true, "BLOGS RETRIEVED SUCCESSFULLY", blogs);
   } catch (error) {
     next(error);
   }
 };
 
-// Get a Blog by id
+/* ============================================================
+   🔸 GET A SINGLE BLOG BY ID (GET /blogs/:id)
+=============================================================== */
 const getSingleBlog = async (req, res, next) => {
   try {
     const { id } = req.params;
+
     const blog = await Blog.findById(id);
-    sendResponse(res, 200, true, "get blog successfully", blog);
+
+    if (!blog) {
+      return sendResponse(res, 404, false, "BLOG NOT FOUND");
+    }
+
+    sendResponse(res, 200, true, "BLOG RETRIEVED SUCCESSFULLY", blog);
   } catch (error) {
     next(error);
   }
 };
 
-// GET ALL MY BLOGS BY EMAIL
-const AllBlogs = async (req, res, next) => {
+/* ============================================================
+   🔸 GET ALL BLOGS BY AUTHOR EMAIL (GET /blogs/blog/:email)
+=============================================================== */
+const getBlogsByEmail = async (req, res, next) => {
   try {
-    const email = req.params.email;
-    console.log(email);
+    const { email } = req.params;
 
-    const totalBlog = await Blog.find({ email }); // use Blog.find instead of just find
-    sendResponse(res, 200, true, "Get all blogs successfully.", totalBlog);
+    if (!email) {
+      return sendResponse(res, 400, false, "EMAIL IS REQUIRED");
+    }
+
+    const userBlogs = await Blog.find({ email });
+
+    sendResponse(res, 200, true, "BLOGS RETRIEVED SUCCESSFULLY", userBlogs);
   } catch (error) {
     next(error);
   }
 };
 
-// Delete a Blog
+/* ============================================================
+   🔸 DELETE A BLOG BY ID (DELETE /blogs/blog/:id)
+=============================================================== */
 const deleteBlog = async (req, res, next) => {
   try {
     const { id } = req.params;
+
     const deletedBlog = await Blog.findByIdAndDelete(id);
-    sendResponse(res, 200, true, "blog deleted successfully", deletedBlog);
+
+    if (!deletedBlog) {
+      return sendResponse(res, 404, false, "BLOG NOT FOUND");
+    }
+
+    sendResponse(res, 200, true, "BLOG DELETED SUCCESSFULLY", deletedBlog);
   } catch (error) {
     next(error);
   }
 };
 
-// Get Data For Update
+/* ============================================================
+   🔸 GET A BLOG FOR UPDATE (GET /blogs/update/:id)
+=============================================================== */
 const getDataForUpdate = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log("Getting blog with ID:", id);
 
-    const blogInfo = await Blog.findById(id);
+    const blog = await Blog.findById(id);
 
-    if (!blogInfo) {
-      return res.status(404).json({
-        success: false,
-        message: "Blog not found",
-      });
+    if (!blog) {
+      return sendResponse(res, 404, false, "BLOG NOT FOUND");
     }
 
-    sendResponse(res, 200, true, "Get a blog successfully", blogInfo);
+    sendResponse(res, 200, true, "BLOG DATA RETRIEVED SUCCESSFULLY", blog);
   } catch (error) {
     next(error);
   }
 };
 
-// PATCH: /blogs/blog/:id
-const updatedBlogById = async (req, res, next) => {
+/* ============================================================
+   🔸 UPDATE A BLOG BY ID (PATCH /blogs/blog/:id)
+=============================================================== */
+const updateBlogById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
@@ -94,23 +122,25 @@ const updatedBlogById = async (req, res, next) => {
       runValidators: true,
     });
 
-    res.status(200).json({
-      success: true,
-      message: "Blog updated successfully",
-      data: updatedBlog,
-    });
+    if (!updatedBlog) {
+      return sendResponse(res, 404, false, "BLOG NOT FOUND");
+    }
+
+    sendResponse(res, 200, true, "BLOG UPDATED SUCCESSFULLY", updatedBlog);
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
     next(error);
   }
 };
 
+/* ============================================================
+   🔹 EXPORT ALL BLOG CONTROLLER FUNCTIONS
+=============================================================== */
 module.exports = {
   createBlog,
   getAllBlogs,
   getSingleBlog,
-  AllBlogs,
+  getBlogsByEmail,
   deleteBlog,
   getDataForUpdate,
-  updatedBlogById,
+  updateBlogById,
 };

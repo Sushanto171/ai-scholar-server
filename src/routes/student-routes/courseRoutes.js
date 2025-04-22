@@ -1,3 +1,4 @@
+// 🔸 IMPORT STUDENT COURSE CONTROLLER FUNCTIONS
 const {
   getAllStudentViewCourses,
   searchCourses,
@@ -5,7 +6,14 @@ const {
   checkCoursePurchaseInfo,
 } = require("../../controllers/student-controller/courseController");
 
+// 🔸 INITIALIZE EXPRESS ROUTER
 const router = require("express").Router();
+
+/**
+ * ======================================
+ *    STUDENT COURSE MANAGEMENT ROUTES
+ * ======================================
+ */
 
 // 🔸 GET ALL COURSES FOR STUDENT VIEW (GET /student/courses/get-courses)
 router.get("/get-courses", getAllStudentViewCourses);

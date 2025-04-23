@@ -7,7 +7,7 @@ const {
   deleteBlog,
   getDataForUpdate,
   updateBlogById,
-  incrementBlogViews
+  incrementBlogViews,
 } = require("../../controllers/admin-controller/blogController");
 
 // 🔸 INITIALIZE EXPRESS ROUTER
@@ -40,7 +40,7 @@ router.get("/update/:id", getDataForUpdate);
 // 🔸 UPDATE BLOG DATA BY ID (PATCH /blogs/blog/:id)
 router.patch("/blog/:id", updateBlogById);
 
-// Increment blog views (PATCH /blogs/views/:id)
+// 🔸 Increment blog views (PATCH /blogs/views/:id)
 router.patch("/views/:id", incrementBlogViews);
 
 module.exports = router;

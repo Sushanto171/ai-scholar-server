@@ -35,6 +35,11 @@ const BlogSchema = new mongoose.Schema({
     type: String, // AUTHOR NAME
     required: true,
   },
+
+  views: {
+    type: Number, // BLOG'S VIEW COUNT
+    default: 0
+  }
 });
 
 // 🔸 CREATE BLOG MODEL USING THE SCHEMA

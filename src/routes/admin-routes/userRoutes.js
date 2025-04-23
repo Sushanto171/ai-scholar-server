@@ -16,7 +16,7 @@ const router = require("express").Router();
 
 /** 
  * ================================
- *        USER MANAGEMENT ROUTES
+ *       USER MANAGEMENT ROUTES
  * ================================
  */
 

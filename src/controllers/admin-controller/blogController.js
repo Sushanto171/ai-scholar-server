@@ -26,7 +26,7 @@ const createBlog = async (req, res, next) => {
 =============================================================== */
 const getAllBlogs = async (req, res, next) => {
   try {
-    const blogs = await Blog.find();
+    const blogs = await Blog.find().sort({ views: -1, postDate: -1 });
     sendResponse(res, 200, true, "BLOGS RETRIEVED SUCCESSFULLY", blogs);
   } catch (error) {
     next(error);
@@ -132,6 +132,28 @@ const updateBlogById = async (req, res, next) => {
   }
 };
 
+const incrementBlogViews = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    
+    const blog = await Blog.findByIdAndUpdate(
+      id,
+      { $inc: { views: 1 } },
+      { new: true }
+    );
+
+    if (!blog) {
+      return sendResponse(res, 404, false, "BLOG NOT FOUND");
+    }
+
+    sendResponse(res, 200, true, "VIEW COUNT UPDATED", blog);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
 /* ============================================================
    🔹 EXPORT ALL BLOG CONTROLLER FUNCTIONS
 =============================================================== */
@@ -143,4 +165,5 @@ module.exports = {
   deleteBlog,
   getDataForUpdate,
   updateBlogById,
+  incrementBlogViews
 };

@@ -10,9 +10,9 @@ const {
 router.use(express.json());
 
 /**
- * ======================================
- *   COURSE PURCHASE MANAGEMENT ROUTES
- * ======================================
+ * =======================================
+ *    COURSE PURCHASE MANAGEMENT ROUTES
+ * =======================================
  */
 
 // 🔸 CREATE PAYMENT INTENT (POST /student/course-payment/create-payment-intent)

@@ -9,9 +9,9 @@ const {
 const router = require("express").Router();
 
 /**
- * ======================================
+ * =======================================
  *    COURSE PROGRESS MANAGEMENT ROUTES
- * ======================================
+ * =======================================
  */
 
 // 🔸 GET CURRENT COURSE PROGRESS (GET /student/course-progress/get-course/:userId/:courseId)

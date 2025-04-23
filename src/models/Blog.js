@@ -1,4 +1,3 @@
-// 🔸 IMPORT MONGOOSE FOR SCHEMA DEFINITION
 const mongoose = require("mongoose");
 
 // 🔸 DEFINE BLOG SCHEMA STRUCTURE
@@ -38,8 +37,8 @@ const BlogSchema = new mongoose.Schema({
 
   views: {
     type: Number, // BLOG'S VIEW COUNT
-    default: 0
-  }
+    default: 0,
+  },
 });
 
 // 🔸 CREATE BLOG MODEL USING THE SCHEMA

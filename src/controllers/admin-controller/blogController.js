@@ -132,10 +132,13 @@ const updateBlogById = async (req, res, next) => {
   }
 };
 
+/* ============================================================
+   🔸 Increment blog views (PATCH /blogs/views/:id)
+=============================================================== */
 const incrementBlogViews = async (req, res, next) => {
   try {
     const { id } = req.params;
-    
+
     const blog = await Blog.findByIdAndUpdate(
       id,
       { $inc: { views: 1 } },
@@ -152,8 +155,6 @@ const incrementBlogViews = async (req, res, next) => {
   }
 };
 
-
-
 /* ============================================================
    🔹 EXPORT ALL BLOG CONTROLLER FUNCTIONS
 =============================================================== */
@@ -165,5 +166,5 @@ module.exports = {
   deleteBlog,
   getDataForUpdate,
   updateBlogById,
-  incrementBlogViews
+  incrementBlogViews,
 };

@@ -1,9 +1,9 @@
 const cloudinary = require("cloudinary").v2;
 
-// 🔹 Configures Cloudinary SDK with environment variables
+// 🔹 CONFIGURE CLOUDINARY SDK WITH ENVIRONMENT VARIABLES
 const configureCloudinary = () => {
   try {
-    // Validate required environment variables
+    // VALIDATE REQUIRED ENVIRONMENT VARIABLES
     if (
       !process.env.CLOUDINARY_CLOUD_NAME ||
       !process.env.CLOUDINARY_API_KEY ||
@@ -12,7 +12,7 @@ const configureCloudinary = () => {
       throw new Error("Missing Cloudinary configuration environment variables");
     }
 
-    // Configure Cloudinary SDK
+    // CONFIGURE CLOUDINARY SDK
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
       api_key: process.env.CLOUDINARY_API_KEY,

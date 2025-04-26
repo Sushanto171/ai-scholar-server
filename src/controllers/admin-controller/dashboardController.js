@@ -71,8 +71,8 @@ const getLast12MonthsData = async (model) => {
   return last12Months;
 };
 
-// Get dashboard stats
-exports.getDashboardStats = async (req, res) => {
+// Helper function to get dashboard stats
+const getStats = async () => {
   try {
     const totalCourses = await Course.countDocuments();
     const totalInstructors = await User.countDocuments({ role: 'instructor' });
@@ -90,20 +90,20 @@ exports.getDashboardStats = async (req, res) => {
     
     const totalRevenue = revenueResult.length > 0 ? revenueResult[0].total : 0;
     
-    sendResponse(res, 200, true, 'Dashboard stats fetched successfully', {
+    return {
       totalCourses,
       totalInstructors,
       totalStudents,
       totalRevenue,
-    });
+    };
   } catch (error) {
     console.error('Error fetching dashboard stats:', error);
-    sendResponse(res, 500, false, 'Error fetching dashboard stats');
+    throw error;
   }
 };
 
-// Get charts data
-exports.getChartsData = async (req, res) => {
+// Helper function to get charts data
+const getCharts = async () => {
   try {
     // Enrollment data (using CoursePurchase as proxy for enrollments)
     const enrollmentData = await getLast12MonthsData(CoursePurchase);
@@ -145,20 +145,20 @@ exports.getChartsData = async (req, res) => {
       },
     ]);
     
-    sendResponse(res, 200, true, 'Charts data fetched successfully', {
+    return {
       enrollmentData,
       revenueData,
       categoryData,
       roleData,
-    });
+    };
   } catch (error) {
     console.error('Error fetching charts data:', error);
-    sendResponse(res, 500, false, 'Error fetching charts data');
+    throw error;
   }
 };
 
-// Get tables data
-exports.getTablesData = async (req, res) => {
+// Helper function to get tables data
+const getTables = async () => {
   try {
     // Top performing courses (by enrolled students)
     const topCourses = await Course.find()
@@ -207,13 +207,43 @@ exports.getTablesData = async (req, res) => {
       joinedOn: new Date(user.createdAt).toLocaleDateString(),
     }));
     
-    sendResponse(res, 200, true, 'Tables data fetched successfully', {
+    return {
       topCourses: formattedTopCourses,
       recentEnrollments: formattedRecentEnrollments,
       newUsers: formattedNewUsers,
-    });
+    };
   } catch (error) {
     console.error('Error fetching tables data:', error);
+    throw error;
+  }
+};
+
+// Get dashboard stats
+exports.getDashboardStats = async (req, res) => {
+  try {
+    const stats = await getStats();
+    sendResponse(res, 200, true, 'Dashboard stats fetched successfully', stats);
+  } catch (error) {
+    sendResponse(res, 500, false, 'Error fetching dashboard stats');
+  }
+};
+
+// Get charts data
+exports.getChartsData = async (req, res) => {
+  try {
+    const charts = await getCharts();
+    sendResponse(res, 200, true, 'Charts data fetched successfully', charts);
+  } catch (error) {
+    sendResponse(res, 500, false, 'Error fetching charts data');
+  }
+};
+
+// Get tables data
+exports.getTablesData = async (req, res) => {
+  try {
+    const tables = await getTables();
+    sendResponse(res, 200, true, 'Tables data fetched successfully', tables);
+  } catch (error) {
     sendResponse(res, 500, false, 'Error fetching tables data');
   }
 };
@@ -221,22 +251,41 @@ exports.getTablesData = async (req, res) => {
 // Get all dashboard data
 exports.getDashboardData = async (req, res) => {
   try {
-    // Get stats
-    const stats = await this.getDashboardStats(req, res, true);
-    
-    // Get charts data
-    const charts = await this.getChartsData(req, res, true);
-    
-    // Get tables data
-    const tables = await this.getTablesData(req, res, true);
-    
-    sendResponse(res, 200, true, 'Dashboard data fetched successfully', {
-      stats: stats.data,
-      charts: charts.data,
-      tables: tables.data,
-    });
+    // Get all data in parallel
+    const [stats, charts, tables] = await Promise.all([
+      getStats(),
+      getCharts(),
+      getTables()
+    ]);
+
+    // Ensure we have proper data structure
+    const responseData = {
+      success: true,
+      message: 'Dashboard data fetched successfully',
+      data: {
+        stats,
+        charts: {
+          enrollmentData: charts.enrollmentData,
+          revenueData: charts.revenueData,
+          categoryData: charts.categoryData,
+          roleData: charts.roleData
+        },
+        tables: {
+          topCourses: tables.topCourses,
+          recentEnrollments: tables.recentEnrollments,
+          newUsers: tables.newUsers
+        }
+      }
+    };
+
+    console.log('Dashboard data response:', JSON.stringify(responseData, null, 2));
+    res.status(200).json(responseData);
   } catch (error) {
     console.error('Error fetching dashboard data:', error);
-    sendResponse(res, 500, false, 'Error fetching dashboard data');
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching dashboard data',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };

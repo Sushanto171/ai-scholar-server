@@ -48,13 +48,11 @@ const getUsers = async (req, res, next) => {
 const updateUserRole = async (req, res, next) => {
   try {
     const { id } = req.params;
-    // console.log("id...", id);
+
     const { role, banStatus } = req.body;
-    // console.log("banStatus...",role);
-    // console.log("banStatus...", role, banStatus);
+
     const updateData = {};
-    // // Validate role
-    // const allowedRoles = ["student", "instructor", "admin"];
+
     if (role) {
       updateData.role = role;
     }

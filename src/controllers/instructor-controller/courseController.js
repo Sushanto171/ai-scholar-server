@@ -198,7 +198,7 @@ const getCategoryList = async (req, res, next) => {
     const result = await Course.find({}, "category");
 
     const categories = [];
-    
+
     result.forEach((course) => {
       if (!categories.some((item) => item.category === course.category)) {
         categories.push({ category: course.category, _id: course._id });

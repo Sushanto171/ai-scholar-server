@@ -239,7 +239,6 @@ const updateProfileImage = async (req, res, next) => {
     const { email } = req.params;
     const { image } = req.body;
 
-    // VALIDATION
     if (!email || !image) {
       return res.status(400).json({
         message: "EMAIL AND IMAGE URL ARE REQUIRED",

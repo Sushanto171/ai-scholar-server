@@ -49,29 +49,25 @@ const updateUserRole = async (req, res, next) => {
   try {
     const { id } = req.params;
     // console.log("id...", id);
-    const { role , banStatus} = req.body;
+    const { role, banStatus } = req.body;
     // console.log("banStatus...",role);
     // console.log("banStatus...", role, banStatus);
     const updateData = {};
     // // Validate role
     // const allowedRoles = ["student", "instructor", "admin"];
     if (role) {
-     
       updateData.role = role;
     }
-    
-    
+
     if (typeof banStatus === "boolean") {
-      
       updateData.banStatus = banStatus;
     }
-    console.log(updateData)
+    console.log(updateData);
 
-    const updatedUser = await User.findByIdAndUpdate(
-      id,
-      updateData ,
-      { new: true, runValidators: true }
-    );
+    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!updatedUser) {
       return sendResponse(res, 404, false, "USER NOT FOUND");
@@ -220,32 +216,18 @@ const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+
 /* ============================================================
    🔸 Delete  USER PROFILE BY ID (Delete /users/user/:id)
 =============================================================== */
 const deleteUser = async (req, res, next) => {
   try {
-    const {id} = req.params;
-    console.log(id)
+    const { id } = req.params;
+    console.log(id);
 
-    // const updateDoc = {
-    //   $set: {
-    //     name,
-    //     email,
-    //     about,
-    //   },
-    // };
+    const deletedUserProfile = await User.findByIdAndDelete(id);
 
-    const updatedUserProfile = await User.findByIdAndDelete(
-      id
-    );
-
-    sendResponse(
-      res,
-      200,
-      true,
-      "USER PROFILE DELETED SUCCESSFULLY",
-    );
+    sendResponse(res, 200, true, "USER PROFILE DELETED SUCCESSFULLY");
   } catch (error) {
     next(error);
   }
@@ -301,5 +283,5 @@ module.exports = {
   singleUser,
   updateUser,
   updateProfileImage,
-  deleteUser
+  deleteUser,
 };

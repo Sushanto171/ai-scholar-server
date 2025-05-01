@@ -133,7 +133,7 @@ const updateBlogById = async (req, res, next) => {
 };
 
 /* ============================================================
-   🔸 Increment blog views (PATCH /blogs/views/:id)
+   🔸 INCREMENT BLOG VIEWS (PATCH /blogs/views/:id)
 =============================================================== */
 const incrementBlogViews = async (req, res, next) => {
   try {

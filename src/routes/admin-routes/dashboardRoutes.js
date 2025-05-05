@@ -5,9 +5,9 @@ const dashboardController = require("../../controllers/admin-controller/dashboar
 const router = require("express").Router();
 
 /**
- * ============================
+ * ===========================
  *      DASHBOARD ROUTES
- * ============================
+ * ===========================
  */
 
 // 🔸 GET ALL DASHBOARD DATA (GET /dashboard)

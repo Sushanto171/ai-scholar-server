@@ -152,7 +152,7 @@ const checkCoursePurchaseInfo = async (req, res) => {
   try {
     const { id: courseId, studentId } = req.params;
 
-    // Validate IDs
+    // VALIDATE IDS
     if (!checkId(courseId)) {
       return res.status(400).json({
         success: false,
@@ -167,7 +167,7 @@ const checkCoursePurchaseInfo = async (req, res) => {
       });
     }
 
-    // Check if student has purchased the course
+    // CHECK IF STUDENT HAS PURCHASED THE COURSE
     const studentCourses = await StudentCourses.findOne({ userId: studentId });
     const hasPurchased = studentCourses?.courses.some(
       (course) => course.courseId === courseId

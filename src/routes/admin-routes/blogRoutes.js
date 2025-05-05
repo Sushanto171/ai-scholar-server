@@ -15,7 +15,7 @@ const router = require("express").Router();
 
 /**
  * ================================
- *       BLOG MANAGEMENT ROUTES
+ *      BLOG MANAGEMENT ROUTES
  * ================================
  */
 
@@ -40,7 +40,7 @@ router.get("/update/:id", getDataForUpdate);
 // 🔸 UPDATE BLOG DATA BY ID (PATCH /blogs/blog/:id)
 router.patch("/blog/:id", updateBlogById);
 
-// 🔸 Increment blog views (PATCH /blogs/views/:id)
+// 🔸 INCREMENT BLOG VIEWS (PATCH /blogs/views/:id)
 router.patch("/views/:id", incrementBlogViews);
 
 module.exports = router;
